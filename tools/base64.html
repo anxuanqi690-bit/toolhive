@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encoder/Decoder - Encode & Decode Base64 Online | ToolHive</title>
+  <meta name="description" content="Free online Base64 encoder and decoder. Encode or decode text and files to Base64 format instantly in your browser.">
+  <meta name="keywords" content="base64 encoder, base64 decoder, encode base64, decode base64, base64 converter">
+  
+  <meta property="og:title" content="Base64 Encoder/Decoder - ToolHive">
+  <meta property="og:description" content="Encode or decode text and files to Base64 format.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🔐 Base64 Encoder/Decoder</h1>
+        <p class="text-gray-600">Encode or decode text and files to Base64 format</p>
+      </div>
+
+      <!-- Mode Tabs -->
+      <div class="flex justify-center mb-6">
+        <div class="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
+          <button id="textModeBtn" onclick="setMode('text')" class="px-4 py-2 rounded-md text-sm font-medium transition bg-white shadow text-primary">Text Mode</button>
+          <button id="fileModeBtn" onclick="setMode('file')" class="px-4 py-2 rounded-md text-sm font-medium transition text-gray-600 hover:text-gray-900">File Mode</button>
+        </div>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Text Mode -->
+        <div id="textMode">
+          <!-- Input -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Input</label>
+            <textarea 
+              id="textInput" 
+              class="tool-input w-full"
+              style="min-height: 150px;"
+              placeholder="Enter text to encode or Base64 to decode..."
+            ></textarea>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap justify-center gap-3 mb-4">
+            <button onclick="encodeText()" class="btn-primary">🔒 Encode to Base64</button>
+            <button onclick="decodeText()" class="btn-secondary">🔓 Decode from Base64</button>
+          </div>
+
+          <!-- Output -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Output</label>
+            <textarea 
+              id="textOutput" 
+              class="tool-output w-full"
+              style="min-height: 150px;"
+              readonly
+              placeholder="Result will appear here..."
+            ></textarea>
+          </div>
+
+          <!-- Copy Button -->
+          <div class="text-center">
+            <button onclick="copyTextOutput()" class="btn-secondary">📋 Copy Output</button>
+          </div>
+        </div>
+
+        <!-- File Mode -->
+        <div id="fileMode" class="hidden">
+          <!-- File Input -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select a file</label>
+            <div class="file-input-wrapper">
+              <button class="btn-primary w-full">📁 Choose File</button>
+              <input type="file" id="fileInput" onchange="handleFile(event)">
+            </div>
+          </div>
+
+          <!-- File Info -->
+          <div id="fileInfo" class="hidden mb-4 p-4 bg-white rounded-lg border border-gray-200">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-medium text-gray-900" id="fileName">filename.ext</p>
+                <p class="text-sm text-gray-500" id="fileSize">0 KB</p>
+              </div>
+              <button onclick="clearFile()" class="text-red-500 hover:text-red-700">✕</button>
+            </div>
+          </div>
+
+          <!-- File Mode Actions -->
+          <div class="flex flex-wrap justify-center gap-3 mb-4">
+            <button onclick="encodeFile()" class="btn-primary">🔒 Encode to Base64</button>
+            <button onclick="decodeFile()" class="btn-secondary">🔓 Decode from Base64</button>
+          </div>
+
+          <!-- File Output -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Base64 Output</label>
+            <textarea 
+              id="fileOutput" 
+              class="tool-output w-full"
+              style="min-height: 200px;"
+              readonly
+              placeholder="Base64 result will appear here (or decoded file download will start)..."
+            ></textarea>
+          </div>
+
+          <!-- Copy/Download Buttons -->
+          <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="copyFileOutput()" class="btn-secondary">📋 Copy Base64</button>
+            <button id="downloadEncodedBtn" onclick="downloadEncoded()" class="btn-secondary hidden">⬇️ Download as .txt</button>
+          </div>
+        </div>
+
+        <!-- Error/Success Message -->
+        <div id="message" class="hidden mt-4 text-center py-3 px-4 rounded-lg"></div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="json-formatter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📋</span>
+            <span>JSON Formatter</span>
+          </a>
+          <a href="qr-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">📱</span>
+            <span>QR Generator</span>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔑</span>
+            <span>Password Generator</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    let currentMode = 'text';
+    let currentFile = null;
+    let currentBase64 = '';
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('textMode').classList.toggle('hidden', mode !== 'text');
+      document.getElementById('fileMode').classList.toggle('hidden', mode !== 'file');
+      document.getElementById('textModeBtn').classList.toggle('bg-white', mode === 'text');
+      document.getElementById('textModeBtn').classList.toggle('shadow', mode === 'text');
+      document.getElementById('textModeBtn').classList.toggle('text-primary', mode === 'text');
+      document.getElementById('textModeBtn').classList.toggle('text-gray-600', mode !== 'text');
+      document.getElementById('fileModeBtn').classList.toggle('bg-white', mode === 'file');
+      document.getElementById('fileModeBtn').classList.toggle('shadow', mode === 'file');
+      document.getElementById('fileModeBtn').classList.toggle('text-primary', mode === 'file');
+      document.getElementById('fileModeBtn').classList.toggle('text-gray-600', mode !== 'file');
+    }
+
+    function showMessage(text, isError = false) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `mt-4 text-center py-3 px-4 rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+      msg.classList.remove('hidden');
+    }
+
+    // Text Mode Functions
+    function encodeText() {
+      const input = document.getElementById('textInput').value;
+      if (!input) {
+        showMessage('Please enter some text to encode', true);
+        return;
+      }
+      try {
+        const encoded = btoa(unescape(encodeURIComponent(input)));
+        document.getElementById('textOutput').value = encoded;
+        showMessage('✅ Encoded successfully!');
+      } catch (e) {
+        showMessage('❌ Encoding failed: ' + e.message, true);
+      }
+    }
+
+    function decodeText() {
+      const input = document.getElementById('textInput').value;
+      if (!input) {
+        showMessage('Please enter some Base64 to decode', true);
+        return;
+      }
+      try {
+        const decoded = decodeURIComponent(escape(atob(input)));
+        document.getElementById('textOutput').value = decoded;
+        showMessage('✅ Decoded successfully!');
+      } catch (e) {
+        showMessage('❌ Invalid Base64 string', true);
+      }
+    }
+
+    function copyTextOutput() {
+      const output = document.getElementById('textOutput').value;
+      if (!output) {
+        showMessage('Nothing to copy', true);
+        return;
+      }
+      navigator.clipboard.writeText(output).then(() => showMessage('📋 Copied to clipboard!'));
+    }
+
+    // File Mode Functions
+    function handleFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      currentFile = file;
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('fileSize').textContent = formatFileSize(file.size);
+      document.getElementById('fileInfo').classList.remove('hidden');
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentBase64 = btoa(e.target.result);
+        document.getElementById('fileOutput').value = currentBase64;
+        document.getElementById('downloadEncodedBtn').classList.remove('hidden');
+      };
+      reader.readAsBinaryString(file);
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function clearFile() {
+      currentFile = null;
+      currentBase64 = '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileInfo').classList.add('hidden');
+      document.getElementById('fileOutput').value = '';
+      document.getElementById('downloadEncodedBtn').classList.add('hidden');
+    }
+
+    function encodeFile() {
+      if (!currentBase64) {
+        showMessage('Please select a file first', true);
+        return;
+      }
+      document.getElementById('fileOutput').value = currentBase64;
+      showMessage('✅ File encoded to Base64!');
+    }
+
+    function decodeFile() {
+      const base64 = document.getElementById('fileOutput').value.trim();
+      if (!base64) {
+        showMessage('Please enter Base64 data to decode', true);
+        return;
+      }
+      try {
+        const binary = atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        
+        const blob = new Blob([bytes]);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'decoded_file';
+        a.click();
+        URL.revokeObjectURL(url);
+        showMessage('⬇️ File download started!');
+      } catch (e) {
+        showMessage('❌ Invalid Base64 data', true);
+      }
+    }
+
+    function copyFileOutput() {
+      const output = document.getElementById('fileOutput').value;
+      if (!output) {
+        showMessage('Nothing to copy', true);
+        return;
+      }
+      navigator.clipboard.writeText(output).then(() => showMessage('📋 Copied to clipboard!'));
+    }
+
+    function downloadEncoded() {
+      const base64 = document.getElementById('fileOutput').value;
+      if (!base64) return;
+      
+      const blob = new Blob([base64], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (currentFile ? currentFile.name : 'file') + '.base64.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

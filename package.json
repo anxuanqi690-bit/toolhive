@@ -1,0 +1,14 @@
+{
+  "name": "toolhive",
+  "version": "1.0.0",
+  "description": "ToolHive - Free Online Tools - No Signup Required",
+  "scripts": {
+    "dev": "echo 'This is a static site. No dev server needed.'",
+    "build": "echo 'Static site - nothing to build'"
+  },
+  "vercel": {
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
+  }
+}

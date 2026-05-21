@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToolHive - Free Online Tools - No Signup Required</title>
+  <meta name="description" content="ToolHive offers 8 free online tools including QR Code Generator, JSON Formatter, Color Converter, and more. No signup required, no limits. Boost your productivity today!">
+  <meta name="keywords" content="free online tools, QR code generator, JSON formatter, color converter, text counter, base64 encoder, password generator, lorem ipsum, markdown preview">
+  <meta name="author" content="ToolHive">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="ToolHive - Free Online Tools - No Signup Required">
+  <meta property="og:description" content="8 free online tools to boost your productivity. QR codes, JSON formatting, color conversion, and more. No signup, no limits.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://toolhive.dev">
+  <meta property="og:image" content="https://toolhive.dev/og-image.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ToolHive - Free Online Tools">
+  <meta name="twitter:description" content="8 free online tools to boost your productivity. No signup required.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <span class="text-sm text-gray-500 hidden sm:block">Free Online Tools</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-b from-blue-50 to-white py-16 sm:py-24">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+        Free Online Tools<br>
+        <span class="text-primary">No Signup, No Limits</span>
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+        Boost your productivity with 8 powerful free tools. QR codes, JSON formatting, 
+        color conversion, text analysis, and more. All in your browser, no signup required.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#tools" class="btn-primary">Browse All Tools →</a>
+        <a href="tools/qr-generator.html" class="btn-secondary">Try QR Generator</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tools Grid -->
+  <main id="tools" class="flex-1 py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">All Tools</h2>
+        <p class="text-gray-600">Click any tool to start using it instantly</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- QR Code Generator -->
+        <a href="tools/qr-generator.html" class="tool-card">
+          <div class="icon">📱</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">QR Code Generator</h3>
+          <p class="text-gray-600 text-sm mb-4">Create QR codes instantly from any text or URL. Download as PNG image.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- JSON Formatter -->
+        <a href="tools/json-formatter.html" class="tool-card">
+          <div class="icon">📋</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">JSON Formatter</h3>
+          <p class="text-gray-600 text-sm mb-4">Format, validate, and beautify your JSON data with one click.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Color Converter -->
+        <a href="tools/color-converter.html" class="tool-card">
+          <div class="icon">🎨</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Color Converter</h3>
+          <p class="text-gray-600 text-sm mb-4">Convert colors between HEX, RGB, and HSL formats in real-time.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Text Counter -->
+        <a href="tools/text-counter.html" class="tool-card">
+          <div class="icon">📝</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Text Counter</h3>
+          <p class="text-gray-600 text-sm mb-4">Count characters, words, sentences, and paragraphs. Get reading time estimates.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Base64 Encoder/Decoder -->
+        <a href="tools/base64.html" class="tool-card">
+          <div class="icon">🔐</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Base64 Encoder/Decoder</h3>
+          <p class="text-gray-600 text-sm mb-4">Encode or decode text and files to/from Base64 format easily.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Password Generator -->
+        <a href="tools/password-generator.html" class="tool-card">
+          <div class="icon">🔑</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Password Generator</h3>
+          <p class="text-gray-600 text-sm mb-4">Generate strong, secure passwords with customizable options.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Lorem Ipsum Generator -->
+        <a href="tools/lorem-ipsum.html" class="tool-card">
+          <div class="icon">📄</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Lorem Ipsum Generator</h3>
+          <p class="text-gray-600 text-sm mb-4">Generate placeholder text for your designs and mockups instantly.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- Markdown Preview -->
+        <a href="tools/markdown-preview.html" class="tool-card">
+          <div class="icon">📖</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Markdown Preview</h3>
+          <p class="text-gray-600 text-sm mb-4">Write and preview Markdown with live side-by-side editing.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Features Section -->
+  <section class="bg-gray-50 py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center text-gray-900 mb-8">Why Choose ToolHive?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="text-3xl mb-3">⚡</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Lightning Fast</h3>
+          <p class="text-gray-600 text-sm">All tools run locally in your browser. No server requests, no waiting.</p>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl mb-3">🔒</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Privacy First</h3>
+          <p class="text-gray-600 text-sm">Your data never leaves your device. 100% private and secure.</p>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl mb-3">💰</div>
+          <h3 class="font-semibold text-gray-900 mb-2">Completely Free</h3>
+          <p class="text-gray-600 text-sm">No signup, no limits, no premium features. Free forever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="index.html" class="hover:text-primary">Home</a>
+          <a href="#tools" class="hover:text-primary">Tools</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Converter - HEX RGB HSL Converter | ToolHive</title>
+  <meta name="description" content="Free online color converter. Convert colors between HEX, RGB, and HSL formats instantly with live preview.">
+  <meta name="keywords" content="color converter, hex to rgb, rgb to hsl, color picker, color format converter">
+  
+  <meta property="og:title" content="Color Converter - ToolHive">
+  <meta property="og:description" content="Convert colors between HEX, RGB, and HSL formats instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-2xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🎨 Color Converter</h1>
+        <p class="text-gray-600">Convert colors between HEX, RGB, and HSL formats</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Color Preview -->
+        <div id="colorPreview" class="color-preview mb-6" style="background-color: #2563EB;"></div>
+
+        <!-- Color Picker -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Pick a Color</label>
+          <input 
+            type="color" 
+            id="colorPicker" 
+            value="#2563EB"
+            class="w-full h-12 cursor-pointer rounded-lg border border-gray-300"
+          >
+        </div>
+
+        <!-- HEX Input -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">HEX</label>
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="hexInput" 
+              class="tool-input flex-1"
+              value="#2563EB"
+              placeholder="#2563EB"
+              maxlength="7"
+            >
+            <button onclick="copyValue('hexInput')" class="btn-secondary">📋</button>
+          </div>
+        </div>
+
+        <!-- RGB Input -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">RGB</label>
+          <div class="grid grid-cols-4 gap-2">
+            <input type="number" id="rInput" class="tool-input text-center" value="37" min="0" max="255" placeholder="R">
+            <input type="number" id="gInput" class="tool-input text-center" value="99" min="0" max="255" placeholder="G">
+            <input type="number" id="bInput" class="tool-input text-center" value="235" min="0" max="255" placeholder="B">
+            <button onclick="copyValue('rgb')" class="btn-secondary">📋</button>
+          </div>
+        </div>
+
+        <!-- HSL Input -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">HSL</label>
+          <div class="grid grid-cols-4 gap-2">
+            <input type="number" id="hInput" class="tool-input text-center" value="224" min="0" max="360" placeholder="H">
+            <input type="number" id="sInput" class="tool-input text-center" value="83" min="0" max="100" placeholder="S">
+            <input type="number" id="lInput" class="tool-input text-center" value="53" min="0" max="100" placeholder="L">
+            <button onclick="copyValue('hsl')" class="btn-secondary">📋</button>
+          </div>
+        </div>
+
+        <!-- Common Colors -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Colors</label>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setColor('#FF0000')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#FF0000" title="Red"></button>
+            <button onclick="setColor('#FF6B00')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#FF6B00" title="Orange"></button>
+            <button onclick="setColor('#FFFF00')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#FFFF00" title="Yellow"></button>
+            <button onclick="setColor('#00FF00')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#00FF00" title="Green"></button>
+            <button onclick="setColor('#00FFFF')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#00FFFF" title="Cyan"></button>
+            <button onclick="setColor('#0000FF')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#0000FF" title="Blue"></button>
+            <button onclick="setColor('#8B5CF6')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#8B5CF6" title="Purple"></button>
+            <button onclick="setColor('#FF00FF')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#FF00FF" title="Magenta"></button>
+            <button onclick="setColor('#000000')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#000000" title="Black"></button>
+            <button onclick="setColor('#FFFFFF')" class="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition" style="background:#FFFFFF" title="White"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+          <a href="qr-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">📱</span>
+            <span>QR Generator</span>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔑</span>
+            <span>Password Generator</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const colorPicker = document.getElementById('colorPicker');
+    const hexInput = document.getElementById('hexInput');
+    const rInput = document.getElementById('rInput');
+    const gInput = document.getElementById('gInput');
+    const bInput = document.getElementById('bInput');
+    const hInput = document.getElementById('hInput');
+    const sInput = document.getElementById('sInput');
+    const lInput = document.getElementById('lInput');
+    const preview = document.getElementById('colorPreview');
+
+    let isUpdating = false;
+
+    // HEX to RGB
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+
+    // RGB to HEX
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => {
+        const hex = Math.max(0, Math.min(255, Math.round(x))).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      }).join('').toUpperCase();
+    }
+
+    // RGB to HSL
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    // HSL to RGB
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r, g, b;
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+    }
+
+    function updateFromHex() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const hex = hexInput.value.trim();
+      if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+        const rgb = hexToRgb(hex);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        
+        rInput.value = rgb.r;
+        gInput.value = rgb.g;
+        bInput.value = rgb.b;
+        hInput.value = hsl.h;
+        sInput.value = hsl.s;
+        lInput.value = hsl.l;
+        colorPicker.value = hex;
+        preview.style.backgroundColor = hex;
+      }
+      
+      isUpdating = false;
+    }
+
+    function updateFromRgb() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const r = parseInt(rInput.value) || 0;
+      const g = parseInt(gInput.value) || 0;
+      const b = parseInt(bInput.value) || 0;
+      
+      const hex = rgbToHex(r, g, b);
+      const hsl = rgbToHsl(r, g, b);
+      
+      hexInput.value = hex;
+      hInput.value = hsl.h;
+      sInput.value = hsl.s;
+      lInput.value = hsl.l;
+      colorPicker.value = hex;
+      preview.style.backgroundColor = hex;
+      
+      isUpdating = false;
+    }
+
+    function updateFromHsl() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const h = parseInt(hInput.value) || 0;
+      const s = parseInt(sInput.value) || 0;
+      const l = parseInt(lInput.value) || 0;
+      
+      const rgb = hslToRgb(h, s, l);
+      const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+      
+      hexInput.value = hex;
+      rInput.value = rgb.r;
+      gInput.value = rgb.g;
+      bInput.value = rgb.b;
+      colorPicker.value = hex;
+      preview.style.backgroundColor = hex;
+      
+      isUpdating = false;
+    }
+
+    function updateFromPicker() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const hex = colorPicker.value;
+      const rgb = hexToRgb(hex);
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+      
+      hexInput.value = hex;
+      rInput.value = rgb.r;
+      gInput.value = rgb.g;
+      bInput.value = rgb.b;
+      hInput.value = hsl.h;
+      sInput.value = hsl.s;
+      lInput.value = hsl.l;
+      preview.style.backgroundColor = hex;
+      
+      isUpdating = false;
+    }
+
+    function setColor(hex) {
+      hexInput.value = hex;
+      updateFromHex();
+    }
+
+    function copyValue(type) {
+      let text = '';
+      if (type === 'hexInput') {
+        text = hexInput.value;
+      } else if (type === 'rgb') {
+        text = `rgb(${rInput.value}, ${gInput.value}, ${bInput.value})`;
+      } else if (type === 'hsl') {
+        text = `hsl(${hInput.value}, ${sInput.value}%, ${lInput.value}%)`;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied: ' + text);
+      });
+    }
+
+    // Event listeners
+    colorPicker.addEventListener('input', updateFromPicker);
+    hexInput.addEventListener('input', updateFromHex);
+    rInput.addEventListener('input', updateFromRgb);
+    gInput.addEventListener('input', updateFromRgb);
+    bInput.addEventListener('input', updateFromRgb);
+    hInput.addEventListener('input', updateFromHsl);
+    sInput.addEventListener('input', updateFromHsl);
+    lInput.addEventListener('input', updateFromHsl);
+  </script>
+</body>
+</html>

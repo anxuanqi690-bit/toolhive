@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter - Format, Validate & Beautify JSON | ToolHive</title>
+  <meta name="description" content="Free online JSON formatter and validator. Format, beautify, minify, and validate JSON data instantly in your browser.">
+  <meta name="keywords" content="json formatter, json validator, json beautifier, json minifier, json online">
+  
+  <meta property="og:title" content="JSON Formatter - ToolHive">
+  <meta property="og:description" content="Format, validate, and beautify JSON data instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📋 JSON Formatter</h1>
+        <p class="text-gray-600">Format, validate, and beautify your JSON data</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="space-y-4">
+        <!-- Buttons -->
+        <div class="flex flex-wrap justify-center gap-3">
+          <button onclick="formatJSON()" class="btn-primary">✨ Format</button>
+          <button onclick="minifyJSON()" class="btn-secondary">⤵️ Minify</button>
+          <button onclick="validateJSON()" class="btn-secondary">✓ Validate</button>
+          <button onclick="clearAll()" class="btn-secondary">🗑️ Clear</button>
+          <button onclick="copyOutput()" class="btn-secondary">📋 Copy</button>
+        </div>
+
+        <!-- Input/Output Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Input -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Input JSON</label>
+            <textarea 
+              id="jsonInput" 
+              class="tool-input w-full"
+              placeholder='{"name": "John", "age": 30, "city": "New York"}'
+            ></textarea>
+          </div>
+
+          <!-- Output -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Output</label>
+            <textarea 
+              id="jsonOutput" 
+              class="tool-output w-full"
+              readonly
+              placeholder="Formatted JSON will appear here..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div id="status" class="text-center py-3 px-4 rounded-lg hidden"></div>
+
+        <!-- Sample Data -->
+        <div class="text-center">
+          <button onclick="loadSample()" class="text-sm text-primary hover:underline">📥 Load sample JSON</button>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="qr-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">📱</span>
+            <span>QR Generator</span>
+          </a>
+          <a href="base64.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔐</span>
+            <span>Base64 Encoder</span>
+          </a>
+          <a href="markdown-preview.html" class="related-tool-card">
+            <span class="text-xl mr-2">📖</span>
+            <span>Markdown Preview</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const input = document.getElementById('jsonInput');
+    const output = document.getElementById('jsonOutput');
+    const status = document.getElementById('status');
+
+    function showStatus(message, isError = false) {
+      status.textContent = message;
+      status.className = `text-center py-3 px-4 rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+      status.classList.remove('hidden');
+    }
+
+    function getInputValue() {
+      return input.value.trim();
+    }
+
+    function formatJSON() {
+      const text = getInputValue();
+      if (!text) {
+        showStatus('Please enter some JSON first', true);
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(text);
+        output.value = JSON.stringify(parsed, null, 2);
+        showStatus('✅ JSON formatted successfully!');
+      } catch (e) {
+        showStatus(`❌ Invalid JSON: ${e.message}`, true);
+      }
+    }
+
+    function minifyJSON() {
+      const text = getInputValue();
+      if (!text) {
+        showStatus('Please enter some JSON first', true);
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(text);
+        output.value = JSON.stringify(parsed);
+        showStatus('✅ JSON minified successfully!');
+      } catch (e) {
+        showStatus(`❌ Invalid JSON: ${e.message}`, true);
+      }
+    }
+
+    function validateJSON() {
+      const text = getInputValue();
+      if (!text) {
+        showStatus('Please enter some JSON first', true);
+        return;
+      }
+
+      try {
+        JSON.parse(text);
+        showStatus('✅ Valid JSON! No errors found.');
+      } catch (e) {
+        showStatus(`❌ Invalid JSON: ${e.message}`, true);
+      }
+    }
+
+    function clearAll() {
+      input.value = '';
+      output.value = '';
+      status.classList.add('hidden');
+      input.focus();
+    }
+
+    function copyOutput() {
+      if (!output.value) {
+        showStatus('Nothing to copy', true);
+        return;
+      }
+      navigator.clipboard.writeText(output.value).then(() => {
+        showStatus('📋 Copied to clipboard!');
+      });
+    }
+
+    function loadSample() {
+      input.value = JSON.stringify({
+        "tool": "JSON Formatter",
+        "version": "1.0",
+        "features": [
+          "Format",
+          "Minify",
+          "Validate"
+        ],
+        "settings": {
+          "theme": "dark",
+          "indentation": 2
+        },
+        "stats": {
+          "users": 15420,
+          "rating": 4.8
+        }
+      }, null, 2);
+      formatJSON();
+    }
+
+    // Auto-format on paste (optional)
+    input.addEventListener('paste', function() {
+      setTimeout(() => formatJSON(), 100);
+    });
+  </script>
+</body>
+</html>

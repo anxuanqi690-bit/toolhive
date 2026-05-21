@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Preview - Write and Preview Markdown Online | ToolHive</title>
+  <meta name="description" content="Free online Markdown preview tool. Write and preview Markdown with live side-by-side editing. Supports headings, lists, code blocks, and more.">
+  <meta name="keywords" content="markdown preview, markdown editor, markdown parser, markdown converter, write markdown">
+  
+  <meta property="og:title" content="Markdown Preview - ToolHive">
+  <meta property="og:description" content="Write and preview Markdown with live side-by-side editing.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📖 Markdown Preview</h1>
+        <p class="text-gray-600">Write Markdown on the left, see the preview on the right</p>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="bg-gray-50 rounded-lg p-3 mb-4 flex flex-wrap gap-2">
+        <button onclick="insertMarkdown('**', '**')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Bold">𝐁</button>
+        <button onclick="insertMarkdown('*', '*')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary italic" title="Italic">I</button>
+        <button onclick="insertMarkdown('\n## ', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Heading">H2</button>
+        <button onclick="insertMarkdown('\n### ', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Heading 3">H3</button>
+        <button onclick="insertMarkdown('\n- ', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Bullet List">• List</button>
+        <button onclick="insertMarkdown('\n1. ', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Numbered List">1. List</button>
+        <button onclick="insertMarkdown('\n```\n', '\n```')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary font-mono" title="Code Block">&lt;/&gt;</button>
+        <button onclick="insertMarkdown('`', '`')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary font-mono" title="Inline Code">`code`</button>
+        <button onclick="insertMarkdown('\n> ', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Quote">❝</button>
+        <button onclick="insertMarkdown('[', '](url)')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Link">[Link]</button>
+        <button onclick="insertMarkdown('![alt](', ')')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Image">[Img]</button>
+        <button onclick="insertMarkdown('\n---\n', '')" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary" title="Horizontal Rule">—</button>
+        <div class="flex-1"></div>
+        <button onclick="clearEditor()" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-red-500 text-red-500">🗑️ Clear</button>
+        <button onclick="loadSample()" class="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:border-primary">📥 Sample</button>
+      </div>
+
+      <!-- Editor and Preview -->
+      <div class="markdown-editor" style="min-height: 500px;">
+        <!-- Editor -->
+        <div class="editor-pane">
+          <label class="block text-sm font-medium text-gray-700 mb-2">📝 Editor</label>
+          <textarea 
+            id="markdownInput" 
+            class="tool-input w-full"
+            placeholder="Write your Markdown here..."
+          ></textarea>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-pane">
+          <label class="block text-sm font-medium text-gray-700 mb-2">👁️ Preview</label>
+          <div id="markdownPreview" class="markdown-preview"></div>
+        </div>
+      </div>
+
+      <!-- Syntax Help -->
+      <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">📚 Markdown Syntax Reference</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div>
+            <code class="bg-white px-2 py-1 rounded">**bold**</code>
+            <span class="text-gray-500 ml-2">Bold</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">*italic*</code>
+            <span class="text-gray-500 ml-2">Italic</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded"># Heading</code>
+            <span class="text-gray-500 ml-2">Heading</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">[link](url)</code>
+            <span class="text-gray-500 ml-2">Link</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">- item</code>
+            <span class="text-gray-500 ml-2">List</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">`code`</code>
+            <span class="text-gray-500 ml-2">Inline code</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">```block```</code>
+            <span class="text-gray-500 ml-2">Code block</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded">> quote</code>
+            <span class="text-gray-500 ml-2">Quote</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="json-formatter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📋</span>
+            <span>JSON Formatter</span>
+          </a>
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+          <a href="lorem-ipsum.html" class="related-tool-card">
+            <span class="text-xl mr-2">📄</span>
+            <span>Lorem Ipsum</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const markdownInput = document.getElementById('markdownInput');
+    const markdownPreview = document.getElementById('markdownPreview');
+
+    function updatePreview() {
+      const markdown = markdownInput.value;
+      if (markdown.trim()) {
+        markdownPreview.innerHTML = marked.parse(markdown);
+      } else {
+        markdownPreview.innerHTML = '<p class="text-gray-400">Preview will appear here...</p>';
+      }
+    }
+
+    function insertMarkdown(before, after) {
+      const textarea = markdownInput;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selected = text.substring(start, end);
+      
+      textarea.value = text.substring(0, start) + before + selected + after + text.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
+      updatePreview();
+    }
+
+    function clearEditor() {
+      markdownInput.value = '';
+      updatePreview();
+      markdownInput.focus();
+    }
+
+    function loadSample() {
+      markdownInput.value = `# Welcome to Markdown Preview
+
+This is a **live preview** tool. Start typing in the editor and see your Markdown rendered instantly!
+
+## Features
+
+- Live side-by-side editing
+- Support for all common Markdown syntax
+- Easy-to-use toolbar
+- Code blocks with syntax highlighting
+
+## Code Example
+
+\`\`\`javascript
+function hello() {
+  console.log("Hello, World!");
+}
+\`\`\`
+
+## Lists
+
+### Unordered List
+- Item One
+- Item Two
+- Item Three
+
+### Ordered List
+1. First item
+2. Second item
+3. Third item
+
+## Blockquotes
+
+> "The only way to do great work is to love what you do."  
+> — Steve Jobs
+
+## Tables
+
+| Feature | Status |
+|---------|--------|
+| Bold | ✅ |
+| Italic | ✅ |
+| Lists | ✅ |
+| Code | ✅ |
+
+## Links and Images
+
+Check out [ToolHive](https://toolhive.dev) for more free tools!
+
+---
+
+*Happy writing!*`;
+      updatePreview();
+    }
+
+    // Configure marked
+    marked.setOptions({
+      breaks: true,
+      gfm: true
+    });
+
+    // Event listeners
+    markdownInput.addEventListener('input', updatePreview);
+    
+    // Initial preview
+    updatePreview();
+  </script>
+</body>
+</html>
