@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>.htaccess Generator - Create Apache Config Files | ToolHive</title>
+  <meta name="description" content="Free .htaccess generator. Create Apache .htaccess rules for HTTPS redirect, www redirect, caching, security, GZIP compression, and more.">
+  <meta name="keywords" content="htaccess generator, apache config, htaccess rules, cache control, security headers, redirect, gzip compression">
+  
+  <meta property="og:title" content=".htaccess Generator - ToolHive">
+  <meta property="og:description" content="Generate Apache .htaccess rules instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">⚙️ .htaccess Generator</h1>
+        <p class="text-gray-600">Create Apache .htaccess rules for your website</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Rule Toggles -->
+        <div class="space-y-4 mb-6">
+          <!-- HTTPS Redirect -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="httpsRedirect" checked class="w-5 h-5 mt-1 text-primary rounded">
+              <div>
+                <p class="font-medium text-gray-900">🔒 Force HTTPS</p>
+                <p class="text-sm text-gray-500">Redirect all HTTP traffic to HTTPS</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- WWW Redirect -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="wwwRedirect" class="w-5 h-5 mt-1 text-primary rounded">
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">🌐 WWW Redirect</p>
+                <p class="text-sm text-gray-500 mb-2">Choose redirect direction:</p>
+                <select id="wwwDirection" class="w-full p-2 border border-gray-300 rounded text-sm">
+                  <option value="toWww">Non-www → www</option>
+                  <option value="toNonWww">www → Non-www</option>
+                </select>
+              </div>
+            </label>
+          </div>
+
+          <!-- Custom 404 -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="custom404" class="w-5 h-5 mt-1 text-primary rounded">
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">📄 Custom 404 Error Page</p>
+                <p class="text-sm text-gray-500 mb-2">Specify your error page path:</p>
+                <input type="text" id="error404Path" value="/404.html" class="w-full p-2 border border-gray-300 rounded text-sm">
+              </div>
+            </label>
+          </div>
+
+          <!-- Security Headers -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="securityHeaders" checked class="w-5 h-5 mt-1 text-primary rounded">
+              <div>
+                <p class="font-medium text-gray-900">🛡️ Security Headers</p>
+                <p class="text-sm text-gray-500">X-Frame-Options, X-Content-Type-Options, X-XSS-Protection</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- GZIP Compression -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="gzipCompression" checked class="w-5 h-5 mt-1 text-primary rounded">
+              <div>
+                <p class="font-medium text-gray-900">📦 GZIP Compression</p>
+                <p class="text-sm text-gray-500">Enable mod_deflate for faster page loads</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Browser Caching -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="browserCaching" checked class="w-5 h-5 mt-1 text-primary rounded">
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">⏱️ Browser Caching</p>
+                <p class="text-sm text-gray-500 mb-2">Cache static assets:</p>
+                <select id="cacheDuration" class="w-full p-2 border border-gray-300 rounded text-sm">
+                  <option value="1w">1 Week</option>
+                  <option value="1m">1 Month</option>
+                  <option value="6m">6 Months</option>
+                  <option value="1y">1 Year</option>
+                </select>
+              </div>
+            </label>
+          </div>
+
+          <!-- Hotlink Protection -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="hotlinkProtection" class="w-5 h-5 mt-1 text-primary rounded">
+              <div class="flex-1">
+                <p class="font-medium text-gray-900">🔗 Hotlink Protection</p>
+                <p class="text-sm text-gray-500 mb-2">Prevent others from linking to your images</p>
+                <input type="text" id="allowedDomains" placeholder="yourdomain.com (leave empty for all)" class="w-full p-2 border border-gray-300 rounded text-sm">
+              </div>
+            </label>
+          </div>
+
+          <!-- Force Download -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="forceDownload" class="w-5 h-5 mt-1 text-primary rounded">
+              <div>
+                <p class="font-medium text-gray-900">📥 Force File Download</p>
+                <p class="text-sm text-gray-500">Force download instead of opening in browser</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Directory Listing -->
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="disableDirectoryListing" checked class="w-5 h-5 mt-1 text-primary rounded">
+              <div>
+                <p class="font-medium text-gray-900">🚫 Disable Directory Listing</p>
+                <p class="text-sm text-gray-500">Prevent showing folder contents when no index file exists</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="generateHtaccess()" class="btn-primary w-full mb-6">⚡ Generate .htaccess</button>
+
+        <!-- Output -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-sm font-medium text-gray-700">Generated .htaccess</label>
+            <button onclick="copyHtaccess()" class="text-sm text-primary hover:text-primary-dark font-medium">📋 Copy All</button>
+          </div>
+          <pre id="outputCode" class="tool-output" style="min-height: 300px;"><!-- Select rules above and click Generate --></pre>
+        </div>
+      </div>
+
+      <!-- Info Box -->
+      <div class="mt-8 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+        <h3 class="font-semibold text-gray-900 mb-2">⚠️ Important Notes</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Upload the generated file to your website's root directory</li>
+          <li>• The file must be named exactly: <code>.htaccess</code> (with the dot)</li>
+          <li>• Some rules require Apache's mod_rewrite module</li>
+          <li>• Always backup your existing .htaccess before making changes</li>
+          <li>• Test changes on a development server first</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="meta-tag-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🏷️</span>
+            <span>Meta Tag Generator</span>
+          </a>
+          <a href="slug-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🌐</span>
+            <span>Slug Generator</span>
+          </a>
+          <a href="case-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔤</span>
+            <span>Case Converter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function generateHtaccess() {
+      let code = '# Apache Configuration generated by ToolHive\n';
+      code += '# https://toolhive-two.vercel.app/tools/htaccess-generator.html\n\n';
+
+      // Enable Rewrite Engine
+      code += '<IfModule mod_rewrite.c>\n';
+      code += '    RewriteEngine On\n';
+      code += '    RewriteBase /\n\n';
+
+      // HTTPS Redirect
+      if (document.getElementById('httpsRedirect').checked) {
+        code += '    # Force HTTPS\n';
+        code += '    RewriteCond %{HTTPS} off\n';
+        code += '    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n\n';
+      }
+
+      // WWW Redirect
+      if (document.getElementById('wwwRedirect').checked) {
+        const direction = document.getElementById('wwwDirection').value;
+        if (direction === 'toWww') {
+          code += '    # Redirect non-www to www\n';
+          code += '    RewriteCond %{HTTP_HOST} !^www\\. [NC]\n';
+          code += '    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n\n';
+        } else {
+          code += '    # Redirect www to non-www\n';
+          code += '    RewriteCond %{HTTP_HOST} ^www\\.(.+)$ [NC]\n';
+          code += '    RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [L,R=301]\n\n';
+        }
+      }
+
+      code += '</IfModule>\n\n';
+
+      // Custom 404 Error Page
+      if (document.getElementById('custom404').checked) {
+        const errorPath = document.getElementById('error404Path').value || '/404.html';
+        code += `# Custom 404 Error Page\n`;
+        code += `ErrorDocument 404 ${errorPath}\n\n`;
+      }
+
+      // Security Headers
+      if (document.getElementById('securityHeaders').checked) {
+        code += '# Security Headers\n';
+        code += '<IfModule mod_headers.c>\n';
+        code += '    Header always set X-Frame-Options "SAMEORIGIN"\n';
+        code += '    Header always set X-Content-Type-Options "nosniff"\n';
+        code += '    Header always set X-XSS-Protection "1; mode=block"\n';
+        code += '    Header always set Referrer-Policy "strict-origin-when-cross-origin"\n';
+        code += '</IfModule>\n\n';
+      }
+
+      // GZIP Compression
+      if (document.getElementById('gzipCompression').checked) {
+        code += '# Enable GZIP Compression\n';
+        code += '<IfModule mod_deflate.c>\n';
+        code += '    AddOutputFilterByType DEFLATE text/html\n';
+        code += '    AddOutputFilterByType DEFLATE text/css\n';
+        code += '    AddOutputFilterByType DEFLATE text/javascript\n';
+        code += '    AddOutputFilterByType DEFLATE application/javascript\n';
+        code += '    AddOutputFilterByType DEFLATE application/json\n';
+        code += '    AddOutputFilterByType DEFLATE image/svg+xml\n';
+        code += '    AddOutputFilterByType DEFLATE application/xml\n';
+        code += '    AddOutputFilterByType DEFLATE font/ttf font/otf\n';
+        code += '    AddOutputFilterByType DEFLATE application/font-woff application/font-woff2\n';
+        code += '</IfModule>\n\n';
+      }
+
+      // Browser Caching
+      if (document.getElementById('browserCaching').checked) {
+        const cacheDuration = document.getElementById('cacheDuration').value;
+        const cacheMap = {
+          '1w': 604800,
+          '1m': 2592000,
+          '6m': 15768000,
+          '1y': 31536000
+        };
+        const expiry = cacheMap[cacheDuration] || 2592000;
+
+        code += '# Browser Caching\n';
+        code += '<IfModule mod_expires.c>\n';
+        code += '    ExpiresActive On\n';
+        code += `    ExpiresByType image/jpg "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType image/jpeg "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType image/gif "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType image/png "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType image/svg+xml "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType text/css "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType application/javascript "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType application/pdf "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType image/x-icon "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType font/ttf "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType font/woff "access plus ${cacheDuration}"\n`;
+        code += `    ExpiresByType font/woff2 "access plus ${cacheDuration}"\n`;
+        code += '</IfModule>\n\n';
+      }
+
+      // Hotlink Protection
+      if (document.getElementById('hotlinkProtection').checked) {
+        const allowedDomains = document.getElementById('allowedDomains').value.trim();
+        code += '# Hotlink Protection\n';
+        code += '<IfModule mod_rewrite.c>\n';
+        code += '    RewriteEngine On\n';
+        if (allowedDomains) {
+          const domains = allowedDomains.split(',').map(d => d.trim()).filter(d => d);
+          code += '    RewriteCond %{HTTP_REFERER} !^$\n';
+          code += '    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)*' + domains[0].replace('.', '\\.') + '/ [NC]\n';
+          code += '    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)*google\\. [NC]\n';
+          code += '    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)*bing\\. [NC]\n';
+          code += '    RewriteRule \\.(jpg|jpeg|png|gif|pdf)$ - [F]\n';
+        } else {
+          code += '    RewriteCond %{HTTP_REFERER} !^$\n';
+          code += '    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)*([^.]+\\.)?yourdomain\\.com [NC]\n';
+          code += '    RewriteRule \\.(jpg|jpeg|png|gif)$ - [F]\n';
+        }
+        code += '</IfModule>\n\n';
+      }
+
+      // Force File Download
+      if (document.getElementById('forceDownload').checked) {
+        code += '# Force File Download\n';
+        code += '<FilesMatch "\\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip)$">\n';
+        code += '    Header set Content-Disposition "attachment"\n';
+        code += '</FilesMatch>\n\n';
+      }
+
+      // Disable Directory Listing
+      if (document.getElementById('disableDirectoryListing').checked) {
+        code += '# Disable Directory Listing\n';
+        code += 'Options -Indexes\n\n';
+      }
+
+      document.getElementById('outputCode').textContent = code;
+    }
+
+    function copyHtaccess() {
+      const code = document.getElementById('outputCode').textContent;
+      if (code && !code.includes('Select rules above')) {
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.querySelector('[onclick="copyHtaccess()"]');
+          const original = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => btn.textContent = original, 1500);
+        });
+      }
+    }
+
+    // Generate on load
+    window.addEventListener('load', generateHtaccess);
+  </script>
+</body>
+</html>

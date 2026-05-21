@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Cloud Generator - Create Beautiful Text Clouds | ToolHive</title>
+  <meta name="description" content="Free online word cloud generator. Generate visual word clouds from any text with customizable colors, fonts, and layouts. Download as PNG.">
+  <meta name="keywords" content="word cloud generator, text cloud, word art, tag cloud, keyword visualization">
+  
+  <meta property="og:title" content="Word Cloud Generator - ToolHive">
+  <meta property="og:description" content="Create beautiful word clouds from any text instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">☁️ Word Cloud Generator</h1>
+        <p class="text-gray-600">Create beautiful word clouds from any text</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Input Section -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Enter Your Text</label>
+            <textarea 
+              id="inputText" 
+              class="tool-input" 
+              placeholder="Paste or type your text here... The word cloud will analyze word frequency and create a visual representation."
+              rows="12"
+            >The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet at least once. Word clouds are a fun and useful way to visualize text data. They show the most frequently occurring words with larger sizes. Common words appear bigger while rare words appear smaller. You can customize colors, fonts, and layouts. Try pasting an article or a document to see the key themes at a glance.</textarea>
+          </div>
+
+          <!-- Controls Section -->
+          <div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Color Scheme</label>
+              <select id="colorScheme" class="w-full p-3 border border-gray-300 rounded-lg">
+                <option value="blue">Blue Gradient</option>
+                <option value="rainbow">Rainbow</option>
+                <option value="sunset">Sunset</option>
+                <option value="forest">Forest Green</option>
+                <option value="purple">Purple Haze</option>
+                <option value="fire">Fire Red</option>
+                <option value="ocean">Ocean Blue</option>
+                <option value="custom">Custom Colors</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Min Font Size</label>
+                <input type="number" id="minFontSize" value="12" min="8" max="30" class="w-full p-3 border border-gray-300 rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Max Font Size</label>
+                <input type="number" id="maxFontSize" value="60" min="20" max="100" class="w-full p-3 border border-gray-300 rounded-lg">
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="showStopWords" checked class="w-5 h-5 text-primary rounded">
+                <span>Filter common words (the, is, at, which, on)</span>
+              </label>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Number of Words</label>
+              <input type="number" id="maxWords" value="50" min="10" max="200" class="w-full p-3 border border-gray-300 rounded-lg">
+            </div>
+
+            <button onclick="generateWordCloud()" class="btn-primary w-full">⚡ Generate Word Cloud</button>
+          </div>
+        </div>
+
+        <!-- Word Cloud Canvas -->
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Word Cloud Preview</label>
+            <button onclick="downloadWordCloud()" class="btn-secondary text-sm">📥 Download PNG</button>
+          </div>
+          <div class="bg-white rounded-lg border border-gray-200" style="min-height: 400px;">
+            <canvas id="wordCloudCanvas" width="800" height="400" class="w-full"></canvas>
+          </div>
+        </div>
+
+        <!-- Word Frequency Stats -->
+        <div class="mt-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Top Words</label>
+          <div id="wordStats" class="stats-grid"></div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Paste longer text for more accurate word frequency analysis</li>
+          <li>• Experiment with different color schemes for different moods</li>
+          <li>• Adjust font size range to control the visual contrast</li>
+          <li>• Download your word cloud as PNG for use in presentations</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+          <a href="case-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔤</span>
+            <span>Case Converter</span>
+          </a>
+          <a href="slug-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🌐</span>
+            <span>Slug Generator</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const colorSchemes = {
+      blue: ['#1E40AF', '#2563EB', '#3B82F6', '#60A5FA', '#93C5FD'],
+      rainbow: ['#EF4444', '#F97316', '#EAB308', '#22C55E', '#06B6D4', '#3B82F6', '#8B5CF6', '#EC4899'],
+      sunset: ['#F97316', '#EF4444', '#DC2626', '#B91C1C', '#FCD34D'],
+      forest: ['#166534', '#15803D', '#22C55E', '#4ADE80', '#86EFAC'],
+      purple: ['#7C3AED', '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE'],
+      fire: ['#DC2626', '#EF4444', '#F97316', '#FBBF24', '#FDE047'],
+      ocean: ['#0E7490', '#0891B2', '#06B6D4', '#22D3EE', '#67E8F9'],
+      custom: ['#1F2937', '#4B5563', '#6B7280', '#9CA3AF', '#D1D5DB']
+    };
+
+    const stopWords = new Set([
+      'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
+      'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
+      'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
+      'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
+      'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
+      'is', 'was', 'are', 'were', 'been', 'has', 'had', 'its', 'just', 'can',
+      'than', 'into', 'then', 'them', 'some', 'could', 'other', 'more', 'very', 'after'
+    ]);
+
+    function getWordFrequency(text, filterStopWords, maxWords) {
+      const words = text.toLowerCase()
+        .replace(/[^\w\s]/g, ' ')
+        .split(/\s+/)
+        .filter(word => word.length > 2)
+        .filter(word => !filterStopWords || !stopWords.has(word));
+
+      const frequency = {};
+      words.forEach(word => {
+        frequency[word] = (frequency[word] || 0) + 1;
+      });
+
+      return Object.entries(frequency)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, maxWords);
+    }
+
+    function generateWordCloud() {
+      const text = document.getElementById('inputText').value;
+      const colorScheme = document.getElementById('colorScheme').value;
+      const minFont = parseInt(document.getElementById('minFontSize').value);
+      const maxFont = parseInt(document.getElementById('maxFontSize').value);
+      const showStopWords = !document.getElementById('showStopWords').checked;
+      const maxWords = parseInt(document.getElementById('maxWords').value);
+
+      const canvas = document.getElementById('wordCloudCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = canvas.offsetWidth * 2;
+      canvas.height = canvas.offsetHeight * 2;
+      ctx.scale(2, 2);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const colors = colorSchemes[colorScheme] || colorSchemes.blue;
+      const wordFreq = getWordFrequency(text, showStopWords, maxWords);
+
+      if (wordFreq.length === 0) {
+        ctx.fillStyle = '#6B7280';
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('No words to display. Enter some text!', canvas.offsetWidth / 2, canvas.offsetHeight / 2);
+        return;
+      }
+
+      const maxCount = wordFreq[0][1];
+      const minCount = wordFreq[wordFreq.length - 1][1];
+
+      // Simple spiral layout
+      const centerX = canvas.offsetWidth / 2;
+      const centerY = canvas.offsetHeight / 2;
+      const words = [];
+
+      wordFreq.forEach(([word, count], index) => {
+        const fontSize = minFont + ((count - minCount) / (maxCount - minCount || 1)) * (maxFont - minFont);
+        const color = colors[index % colors.length];
+        
+        words.push({ word, fontSize, color, count });
+      });
+
+      // Draw words in spiral pattern
+      let angle = 0;
+      let radius = 0;
+      const placed = [];
+
+      words.forEach((item, index) => {
+        ctx.font = `${item.fontSize}px Arial, sans-serif`;
+        const metrics = ctx.measureText(item.word);
+        const wordWidth = metrics.width;
+        const wordHeight = item.fontSize;
+
+        let placed = false;
+        let attempts = 0;
+
+        while (!placed && attempts < 500) {
+          const x = centerX + radius * Math.cos(angle) - wordWidth / 2;
+          const y = centerY + radius * Math.sin(angle) + wordHeight / 4;
+
+          // Check boundaries
+          if (x > 10 && x + wordWidth < canvas.offsetWidth - 10 &&
+              y - wordHeight > 10 && y < canvas.offsetHeight - 10) {
+            ctx.fillStyle = item.color;
+            ctx.fillText(item.word, x, y);
+            placed = true;
+          }
+
+          angle += 0.5;
+          radius += 0.5;
+          attempts++;
+        }
+
+        if (!placed) {
+          // Force place at random position
+          const x = Math.random() * (canvas.offsetWidth - wordWidth - 20) + 10;
+          const y = Math.random() * (canvas.offsetHeight - wordHeight - 20) + wordHeight + 10;
+          ctx.fillStyle = item.color;
+          ctx.fillText(item.word, x, y);
+        }
+      });
+
+      // Update word stats
+      updateWordStats(wordFreq.slice(0, 10));
+    }
+
+    function updateWordStats(wordFreq) {
+      const statsContainer = document.getElementById('wordStats');
+      statsContainer.innerHTML = wordFreq.map(([word, count]) => `
+        <div class="stat-item">
+          <div class="stat-value">${count}</div>
+          <div class="stat-label">${word}</div>
+        </div>
+      `).join('');
+    }
+
+    function downloadWordCloud() {
+      const canvas = document.getElementById('wordCloudCanvas');
+      const link = document.createElement('a');
+      link.download = 'wordcloud.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Generate on load
+    window.addEventListener('load', generateWordCloud);
+    window.addEventListener('resize', generateWordCloud);
+  </script>
+</body>
+</html>

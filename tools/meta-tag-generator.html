@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Tag Generator - Create SEO & Open Graph Tags | ToolHive</title>
+  <meta name="description" content="Free online meta tag generator. Create complete HTML meta tags including SEO, Open Graph, and Twitter Card tags. Copy with one click.">
+  <meta name="keywords" content="meta tag generator, SEO meta tags, Open Graph tags, Twitter Card, meta description, meta keywords">
+  
+  <meta property="og:title" content="Meta Tag Generator - ToolHive">
+  <meta property="og:description" content="Generate complete HTML meta tags for SEO and social sharing.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🏷️ Meta Tag Generator</h1>
+        <p class="text-gray-600">Create complete SEO and social media meta tags</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Basic Info -->
+        <div class="mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span>📄</span> Basic Information
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Page Title</label>
+              <input type="text" id="pageTitle" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="My Awesome Website" maxlength="60">
+              <p class="text-xs text-gray-500 mt-1"><span id="titleCount">0</span>/60 characters</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Site Name</label>
+              <input type="text" id="siteName" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="My Website">
+            </div>
+          </div>
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+            <textarea id="metaDescription" class="w-full p-3 border border-gray-300 rounded-lg" rows="2" placeholder="A brief description of your page (recommended 150-160 characters)" maxlength="160"></textarea>
+            <p class="text-xs text-gray-500 mt-1"><span id="descCount">0</span>/160 characters</p>
+          </div>
+        </div>
+
+        <!-- SEO Tags -->
+        <div class="mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span>🔍</span> SEO Tags
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+              <input type="text" id="author" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="John Doe">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
+              <input type="text" id="keywords" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="keyword1, keyword2, keyword3">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Canonical URL</label>
+              <input type="url" id="canonicalUrl" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/page">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">robots</label>
+              <select id="robots" class="w-full p-3 border border-gray-300 rounded-lg">
+                <option value="index, follow">index, follow</option>
+                <option value="index, nofollow">index, nofollow</option>
+                <option value="noindex, follow">noindex, follow</option>
+                <option value="noindex, nofollow">noindex, nofollow</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Open Graph Tags -->
+        <div class="mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span>📱</span> Open Graph Tags (Facebook, LinkedIn)
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">OG Image URL</label>
+              <input type="url" id="ogImage" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/image.jpg">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">OG Type</label>
+              <select id="ogType" class="w-full p-3 border border-gray-300 rounded-lg">
+                <option value="website">Website</option>
+                <option value="article">Article</option>
+                <option value="product">Product</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">OG Locale</label>
+              <input type="text" id="ogLocale" class="w-full p-3 border border-gray-300 rounded-lg" value="en_US">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Page URL</label>
+              <input type="url" id="pageUrl" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://example.com/page">
+            </div>
+          </div>
+        </div>
+
+        <!-- Twitter Card Tags -->
+        <div class="mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <span>🐦</span> Twitter Card Tags
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Twitter Card Type</label>
+              <select id="twitterCard" class="w-full p-3 border border-gray-300 rounded-lg">
+                <option value="summary">Summary Card</option>
+                <option value="summary_large_image">Summary Large Image</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Twitter @username</label>
+              <input type="text" id="twitterSite" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="@yourusername">
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="generateTags()" class="btn-primary w-full mb-6">⚡ Generate Meta Tags</button>
+
+        <!-- Output -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-sm font-medium text-gray-700">Generated Code</label>
+            <button onclick="copyTags()" class="text-sm text-primary hover:text-primary-dark font-medium">📋 Copy All</button>
+          </div>
+          <pre id="outputCode" class="tool-output" style="min-height: 200px;"><!-- Enter your website information above and click Generate --></pre>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 SEO Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Keep titles under 60 characters for full display in search results</li>
+          <li>• Meta descriptions should be 150-160 characters for best results</li>
+          <li>• Use high-quality images (1200x630px) for Open Graph tags</li>
+          <li>• Place these tags in the <code>&lt;head&gt;</code> section of your HTML</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="slug-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🌐</span>
+            <span>Slug Generator</span>
+          </a>
+          <a href="case-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔤</span>
+            <span>Case Converter</span>
+          </a>
+          <a href="json-formatter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📋</span>
+            <span>JSON Formatter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Character counters
+    document.getElementById('pageTitle').addEventListener('input', (e) => {
+      document.getElementById('titleCount').textContent = e.target.value.length;
+    });
+    document.getElementById('metaDescription').addEventListener('input', (e) => {
+      document.getElementById('descCount').textContent = e.target.value.length;
+    });
+
+    function generateTags() {
+      const title = document.getElementById('pageTitle').value || 'My Website';
+      const siteName = document.getElementById('siteName').value || title;
+      const description = document.getElementById('metaDescription').value || '';
+      const author = document.getElementById('author').value || '';
+      const keywords = document.getElementById('keywords').value || '';
+      const canonical = document.getElementById('canonicalUrl').value || '';
+      const robots = document.getElementById('robots').value;
+      const ogImage = document.getElementById('ogImage').value || '';
+      const ogType = document.getElementById('ogType').value;
+      const ogLocale = document.getElementById('ogLocale').value;
+      const pageUrl = document.getElementById('pageUrl').value || '';
+      const twitterCard = document.getElementById('twitterCard').value;
+      const twitterSite = document.getElementById('twitterSite').value || '';
+
+      let code = '<!-- Primary Meta Tags -->\n';
+      code += `<title>${escapeHtml(title)}</title>\n`;
+      code += `<meta name="title" content="${escapeHtml(title)}">\n`;
+      code += `<meta name="description" content="${escapeHtml(description)}">\n`;
+      if (author) code += `<meta name="author" content="${escapeHtml(author)}">\n`;
+      if (keywords) code += `<meta name="keywords" content="${escapeHtml(keywords)}">\n`;
+      code += `<meta name="robots" content="${robots}">\n`;
+      if (canonical) code += `<link rel="canonical" href="${escapeHtml(canonical)}">\n`;
+
+      code += '\n<!-- Open Graph / Facebook -->\n';
+      code += `<meta property="og:type" content="${ogType}">\n`;
+      code += `<meta property="og:url" content="${escapeHtml(pageUrl)}">\n`;
+      code += `<meta property="og:title" content="${escapeHtml(title)}">\n`;
+      code += `<meta property="og:description" content="${escapeHtml(description)}">\n`;
+      code += `<meta property="og:site_name" content="${escapeHtml(siteName)}">\n`;
+      code += `<meta property="og:locale" content="${escapeHtml(ogLocale)}">\n`;
+      if (ogImage) code += `<meta property="og:image" content="${escapeHtml(ogImage)}">\n`;
+
+      code += '\n<!-- Twitter -->\n';
+      code += `<meta name="twitter:card" content="${twitterCard}">\n`;
+      if (twitterSite) code += `<meta name="twitter:site" content="${escapeHtml(twitterSite)}">\n`;
+      code += `<meta name="twitter:url" content="${escapeHtml(pageUrl)}">\n`;
+      code += `<meta name="twitter:title" content="${escapeHtml(title)}">\n`;
+      code += `<meta name="twitter:description" content="${escapeHtml(description)}">\n`;
+      if (ogImage) code += `<meta name="twitter:image" content="${escapeHtml(ogImage)}">\n`;
+
+      document.getElementById('outputCode').textContent = code;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function copyTags() {
+      const code = document.getElementById('outputCode').textContent;
+      if (code && !code.includes('Enter your website')) {
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.querySelector('[onclick="copyTags()"]');
+          const original = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => btn.textContent = original, 1500);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

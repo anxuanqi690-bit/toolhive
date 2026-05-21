@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Sorter - Sort & Deduplicate Text Lines | ToolHive</title>
+  <meta name="description" content="Free online line sorter and deduplicator. Sort lines alphabetically, remove duplicates, shuffle randomly, and more. Clean text instantly.">
+  <meta name="keywords" content="line sorter, text deduplicator, sort lines, remove duplicates, organize text, randomize lines">
+  
+  <meta property="og:title" content="Line Sorter - ToolHive">
+  <meta property="og:description" content="Sort, deduplicate, and organize text lines instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📝 Line Sorter & Deduplicator</h1>
+        <p class="text-gray-600">Sort, deduplicate, and organize your text lines</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Input -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Enter Your Text (one item per line)</label>
+          <textarea 
+            id="inputText" 
+            class="tool-input" 
+            placeholder="Enter your text here, one item per line..."
+            rows="10"
+          >Apple
+Banana
+Cherry
+Apple
+Date
+Elderberry
+Fig
+Banana
+Grape
+Cherry</textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <button onclick="sortAZ()" class="btn-secondary py-3">
+            <span class="block text-xl">🔤</span>
+            <span class="block text-sm font-medium">A → Z</span>
+          </button>
+          <button onclick="sortZA()" class="btn-secondary py-3">
+            <span class="block text-xl">🔤</span>
+            <span class="block text-sm font-medium">Z → A</span>
+          </button>
+          <button onclick="removeDuplicates()" class="btn-secondary py-3">
+            <span class="block text-xl">✂️</span>
+            <span class="block text-sm font-medium">Remove Duplicates</span>
+          </button>
+          <button onclick="removeEmpty()" class="btn-secondary py-3">
+            <span class="block text-xl">🗑️</span>
+            <span class="block text-sm font-medium">Remove Empty</span>
+          </button>
+          <button onclick="shuffleLines()" class="btn-secondary py-3">
+            <span class="block text-xl">🔀</span>
+            <span class="block text-sm font-medium">Shuffle</span>
+          </button>
+          <button onclick="reverseLines()" class="btn-secondary py-3">
+            <span class="block text-xl">🔄</span>
+            <span class="block text-sm font-medium">Reverse</span>
+          </button>
+          <button onclick="addLineNumbers()" class="btn-secondary py-3">
+            <span class="block text-xl">🔢</span>
+            <span class="block text-sm font-medium">Add Numbers</span>
+          </button>
+          <button onclick="sortByLength()" class="btn-secondary py-3">
+            <span class="block text-xl">📏</span>
+            <span class="block text-sm font-medium">By Length</span>
+          </button>
+        </div>
+
+        <!-- Copy & Clear -->
+        <div class="flex gap-3 mb-6">
+          <button onclick="copyResult()" class="btn-primary flex-1">📋 Copy Result</button>
+          <button onclick="clearAll()" class="btn-secondary px-6">🗑️ Clear</button>
+        </div>
+
+        <!-- Output -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-sm font-medium text-gray-700">Result</label>
+            <span id="lineCount" class="text-sm text-gray-500">10 lines</span>
+          </div>
+          <div id="outputText" class="tool-output" style="min-height: 200px;"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="totalLines">10</div>
+            <div class="stat-label">Total Lines</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="uniqueLines">7</div>
+            <div class="stat-label">Unique Lines</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="duplicatesRemoved">3</div>
+            <div class="stat-label">Duplicates</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="avgLength">7.4</div>
+            <div class="stat-label">Avg Length</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Perfect for cleaning up lists, URLs, keywords, or any data</li>
+          <li>• Use "Shuffle" for randomizing order</li>
+          <li>• Use "Add Numbers" to number each line</li>
+          <li>• Works with any text - one item per line</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="case-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔤</span>
+            <span>Case Converter</span>
+          </a>
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+          <a href="word-cloud.html" class="related-tool-card">
+            <span class="text-xl mr-2">☁️</span>
+            <span>Word Cloud</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+
+    function getLines() {
+      return inputText.value.split('\n');
+    }
+
+    function setLines(lines) {
+      outputText.textContent = lines.join('\n');
+      updateStats(lines);
+    }
+
+    function updateStats(lines) {
+      const total = lines.length;
+      const unique = [...new Set(lines.filter(l => l.trim()))];
+      const nonEmpty = lines.filter(l => l.trim());
+      const avgLength = nonEmpty.length > 0 
+        ? (nonEmpty.reduce((sum, l) => sum + l.length, 0) / nonEmpty.length).toFixed(1)
+        : 0;
+
+      document.getElementById('totalLines').textContent = total;
+      document.getElementById('uniqueLines').textContent = unique.length;
+      document.getElementById('duplicatesRemoved').textContent = total - unique.length;
+      document.getElementById('avgLength').textContent = avgLength;
+      document.getElementById('lineCount').textContent = `${total} lines`;
+    }
+
+    function sortAZ() {
+      const lines = getLines().filter(l => l.trim());
+      lines.sort((a, b) => a.localeCompare(b));
+      setLines(lines);
+    }
+
+    function sortZA() {
+      const lines = getLines().filter(l => l.trim());
+      lines.sort((a, b) => b.localeCompare(a));
+      setLines(lines);
+    }
+
+    function sortByLength() {
+      const lines = getLines().filter(l => l.trim());
+      lines.sort((a, b) => a.length - b.length);
+      setLines(lines);
+    }
+
+    function removeDuplicates() {
+      const lines = [...new Set(getLines())];
+      setLines(lines);
+    }
+
+    function removeEmpty() {
+      const lines = getLines().filter(l => l.trim());
+      setLines(lines);
+    }
+
+    function shuffleLines() {
+      const lines = getLines().filter(l => l.trim());
+      for (let i = lines.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [lines[i], lines[j]] = [lines[j], lines[i]];
+      }
+      setLines(lines);
+    }
+
+    function reverseLines() {
+      const lines = getLines().filter(l => l.trim()).reverse();
+      setLines(lines);
+    }
+
+    function addLineNumbers() {
+      const lines = getLines().filter(l => l.trim());
+      const numbered = lines.map((line, i) => `${i + 1}. ${line}`);
+      setLines(numbered);
+    }
+
+    function copyResult() {
+      const text = outputText.textContent;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.querySelector('[onclick="copyResult()"]');
+          const original = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => btn.textContent = original, 1500);
+        });
+      }
+    }
+
+    function clearAll() {
+      inputText.value = '';
+      outputText.textContent = '';
+      updateStats([]);
+    }
+
+    // Initialize
+    inputText.addEventListener('input', () => {
+      const lines = getLines().filter(l => l.trim());
+      outputText.textContent = lines.join('\n');
+      updateStats(lines);
+    });
+
+    // Initial stats
+    updateStats(getLines());
+  </script>
+</body>
+</html>

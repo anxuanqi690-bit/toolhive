@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placeholder Image Generator - Create Dummy Images | ToolHive</title>
+  <meta name="description" content="Free placeholder image generator. Create custom sized placeholder images with text. Choose dimensions, colors, and text. Download as PNG.">
+  <meta name="keywords" content="placeholder image, dummy image, placeholder generator, image placeholder, test image">
+  
+  <meta property="og:title" content="Placeholder Image Generator - ToolHive">
+  <meta property="og:description" content="Create custom placeholder images in seconds.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🖼️ Placeholder Image Generator</h1>
+        <p class="text-gray-600">Create custom placeholder images instantly</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Dimensions -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Dimensions</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div>
+              <label class="text-xs text-gray-500">Width (px)</label>
+              <input type="number" id="imgWidth" value="800" min="50" max="4000" class="w-full p-3 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+              <label class="text-xs text-gray-500">Height (px)</label>
+              <input type="number" id="imgHeight" value="600" min="50" max="4000" class="w-full p-3 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+              <label class="text-xs text-gray-500">Background</label>
+              <input type="color" id="bgColor" value="#E5E7EB" class="w-full h-11 rounded-lg cursor-pointer">
+            </div>
+            <div>
+              <label class="text-xs text-gray-500">Text Color</label>
+              <input type="color" id="textColor" value="#6B7280" class="w-full h-11 rounded-lg cursor-pointer">
+            </div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Center Text</label>
+          <input type="text" id="centerText" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 800 x 600">
+        </div>
+
+        <!-- Presets -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Quick Presets</label>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setPreset(1920, 1080, '1920x1080')" class="btn-secondary text-sm">1920×1080 (Full HD)</button>
+            <button onclick="setPreset(1280, 720, '1280x720')" class="btn-secondary text-sm">1280×720 (HD)</button>
+            <button onclick="setPreset(800, 600, '800x600')" class="btn-secondary text-sm">800×600</button>
+            <button onclick="setPreset(640, 480, '640x480')" class="btn-secondary text-sm">640×480 (VGA)</button>
+            <button onclick="setPreset(300, 300, '300x300')" class="btn-secondary text-sm">300×300 (Square)</button>
+            <button onclick="setPreset(150, 150, '150x150')" class="btn-secondary text-sm">150×150 (Avatar)</button>
+            <button onclick="setPreset(1200, 630, '1200x630')" class="btn-secondary text-sm">1200×630 (OG Image)</button>
+            <button onclick="setPreset(1080, 1080, '1080x1080')" class="btn-secondary text-sm">1080×1080 (Social)</button>
+          </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="generateImage()" class="btn-primary w-full mb-6">⚡ Generate Image</button>
+
+        <!-- Preview -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Preview</label>
+            <button onclick="downloadImage()" class="btn-secondary text-sm">📥 Download PNG</button>
+          </div>
+          <div class="bg-white rounded-lg border border-gray-200 p-4 flex justify-center">
+            <canvas id="placeholderCanvas" class="max-w-full"></canvas>
+          </div>
+        </div>
+
+        <!-- URL Output -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Image URL (Base64 Data URL)</label>
+          <div class="flex gap-2">
+            <input type="text" id="imageUrl" readonly class="flex-1 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-50">
+            <button onclick="copyImageUrl()" class="btn-secondary">📋</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Use Cases</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Mockups and wireframes for design projects</li>
+          <li>• Placeholder images for website development</li>
+          <li>• Social media image sizes for planning</li>
+          <li>• Presentations and documents</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="image-compressor.html" class="related-tool-card">
+            <span class="text-xl mr-2">🖼️</span>
+            <span>Image Compressor</span>
+          </a>
+          <a href="image-format-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔄</span>
+            <span>Image Converter</span>
+          </a>
+          <a href="hex-to-rgb.html" class="related-tool-card">
+            <span class="text-xl mr-2">🎨</span>
+            <span>Color Converter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('placeholderCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function setPreset(width, height, text) {
+      document.getElementById('imgWidth').value = width;
+      document.getElementById('imgHeight').value = height;
+      document.getElementById('centerText').value = text;
+      generateImage();
+    }
+
+    function generateImage() {
+      const width = parseInt(document.getElementById('imgWidth').value) || 800;
+      const height = parseInt(document.getElementById('imgHeight').value) || 600;
+      const bgColor = document.getElementById('bgColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const text = document.getElementById('centerText').value || `${width} × ${height}`;
+
+      // Set canvas size
+      canvas.width = width;
+      canvas.height = height;
+
+      // Draw background
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, width, height);
+
+      // Draw border
+      ctx.strokeStyle = '#D1D5DB';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(1, 1, width - 2, height - 2);
+
+      // Draw center text
+      ctx.fillStyle = textColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Calculate font size based on image dimensions
+      const fontSize = Math.min(width, height) * 0.1;
+      ctx.font = `bold ${Math.max(16, Math.min(fontSize, 72))}px Arial, sans-serif`;
+
+      // Add text shadow for better visibility
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+
+      ctx.fillText(text, width / 2, height / 2);
+
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+
+      // Update URL
+      document.getElementById('imageUrl').value = canvas.toDataURL('image/png');
+    }
+
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = `placeholder-${canvas.width}x${canvas.height}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function copyImageUrl() {
+      const url = document.getElementById('imageUrl').value;
+      if (url) {
+        navigator.clipboard.writeText(url).then(() => {
+          const btn = document.querySelector('[onclick="copyImageUrl()"]');
+          const original = btn.textContent;
+          btn.textContent = '✓';
+          setTimeout(() => btn.textContent = original, 1500);
+        });
+      }
+    }
+
+    // Generate on load
+    window.addEventListener('load', generateImage);
+  </script>
+</body>
+</html>

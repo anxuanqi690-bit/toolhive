@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEX RGB CMYK Converter - Color Format Converter | ToolHive</title>
+  <meta name="description" content="Free online color converter. Convert between HEX, RGB, and CMYK color formats instantly. Visual color picker with copy support.">
+  <meta name="keywords" content="color converter, HEX to RGB, RGB to CMYK, CMYK to HEX, color picker, color format">
+  
+  <meta property="og:title" content="HEX RGB CMYK Converter - ToolHive">
+  <meta property="og:description" content="Convert colors between HEX, RGB, and CMYK formats instantly.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🎨 HEX/RGB/CMYK Converter</h1>
+        <p class="text-gray-600">Convert colors between HEX, RGB, and CMYK formats</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Color Preview -->
+        <div class="mb-6">
+          <div id="colorPreview" class="color-preview" style="background-color: #2563EB;"></div>
+        </div>
+
+        <!-- Color Picker -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Pick a Color</label>
+          <input type="color" id="colorPicker" value="#2563EB" class="w-full h-12 cursor-pointer rounded-lg border-2 border-gray-200">
+        </div>
+
+        <!-- HEX Input -->
+        <div class="mb-4">
+          <div class="flex items-center gap-3">
+            <label class="text-sm font-medium text-gray-700 w-24">HEX</label>
+            <input type="text" id="hexInput" value="#2563EB" class="flex-1 p-3 border border-gray-300 rounded-lg font-mono" maxlength="7">
+            <button onclick="copyValue('hexInput')" class="btn-secondary px-4">📋</button>
+          </div>
+        </div>
+
+        <!-- RGB Input -->
+        <div class="mb-4">
+          <div class="flex items-center gap-3">
+            <label class="text-sm font-medium text-gray-700 w-24">RGB</label>
+            <div class="flex-1 grid grid-cols-3 gap-2">
+              <input type="number" id="rgbR" value="37" min="0" max="255" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="R">
+              <input type="number" id="rgbG" value="99" min="0" max="255" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="G">
+              <input type="number" id="rgbB" value="235" min="0" max="255" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="B">
+            </div>
+            <button onclick="copyValue('rgbOutput')" class="btn-secondary px-4">📋</button>
+          </div>
+          <p id="rgbOutput" class="hidden">rgb(37, 99, 235)</p>
+        </div>
+
+        <!-- CMYK Input -->
+        <div class="mb-6">
+          <div class="flex items-center gap-3">
+            <label class="text-sm font-medium text-gray-700 w-24">CMYK</label>
+            <div class="flex-1 grid grid-cols-4 gap-2">
+              <input type="number" id="cmykC" value="84" min="0" max="100" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="C">
+              <input type="number" id="cmykM" value="58" min="0" max="100" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="M">
+              <input type="number" id="cmykY" value="0" min="0" max="100" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="Y">
+              <input type="number" id="cmykK" value="8" min="0" max="100" class="p-3 border border-gray-300 rounded-lg text-center" placeholder="K">
+            </div>
+            <button onclick="copyValue('cmykOutput')" class="btn-secondary px-4">📋</button>
+          </div>
+          <p id="cmykOutput" class="hidden">cmyk(84%, 58%, 0%, 8%)</p>
+        </div>
+
+        <!-- Quick Colors -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Quick Select</label>
+          <div class="grid grid-cols-8 gap-2">
+            <button onclick="setColor('#FF0000')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #FF0000;"></button>
+            <button onclick="setColor('#FF6B00')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #FF6B00;"></button>
+            <button onclick="setColor('#FFD700')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #FFD700;"></button>
+            <button onclick="setColor('#00FF00')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #00FF00;"></button>
+            <button onclick="setColor('#00FFFF')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #00FFFF;"></button>
+            <button onclick="setColor('#2563EB')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #2563EB;"></button>
+            <button onclick="setColor('#8B5CF6')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #8B5CF6;"></button>
+            <button onclick="setColor('#EC4899')" class="w-10 h-10 rounded-lg border border-gray-200 hover:scale-110 transition-transform" style="background-color: #EC4899;"></button>
+          </div>
+        </div>
+
+        <!-- Color Info -->
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+            <div class="text-3xl mb-2">🎨</div>
+            <p class="text-sm text-gray-600">Preview your selected color</p>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+            <div class="text-3xl mb-2">📋</div>
+            <p class="text-sm text-gray-600">Click any format to copy</p>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+            <div class="text-3xl mb-2">🎯</div>
+            <p class="text-sm text-gray-600">Real-time conversion</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Color Format Info</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• <strong>HEX:</strong> Hexadecimal color code (used in CSS, HTML)</li>
+          <li>• <strong>RGB:</strong> Red, Green, Blue values (0-255)</li>
+          <li>• <strong>CMYK:</strong> Cyan, Magenta, Yellow, Key (Black) - used for print</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="color-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🎨</span>
+            <span>Color Converter</span>
+          </a>
+          <a href="css-gradient-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🌈</span>
+            <span>CSS Gradient</span>
+          </a>
+          <a href="placeholder-image.html" class="related-tool-card">
+            <span class="text-xl mr-2">🖼️</span>
+            <span>Placeholder Image</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="../about.html" class="hover:text-primary">About</a>
+          <a href="../contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const colorPicker = document.getElementById('colorPicker');
+    const hexInput = document.getElementById('hexInput');
+    const rgbR = document.getElementById('rgbR');
+    const rgbG = document.getElementById('rgbG');
+    const rgbB = document.getElementById('rgbB');
+    const cmykC = document.getElementById('cmykC');
+    const cmykM = document.getElementById('cmykM');
+    const cmykY = document.getElementById('cmykY');
+    const cmykK = document.getElementById('cmykK');
+    const colorPreview = document.getElementById('colorPreview');
+    const rgbOutput = document.getElementById('rgbOutput');
+    const cmykOutput = document.getElementById('cmykOutput');
+
+    let isUpdating = false;
+
+    // HEX to RGB
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+
+    // RGB to HEX
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => {
+        const hex = Math.max(0, Math.min(255, Math.round(x))).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      }).join('').toUpperCase();
+    }
+
+    // RGB to CMYK
+    function rgbToCmyk(r, g, b) {
+      r /= 255;
+      g /= 255;
+      b /= 255;
+      
+      const k = 1 - Math.max(r, g, b);
+      if (k === 1) {
+        return { c: 0, m: 0, y: 0, k: 100 };
+      }
+      
+      const c = (1 - r - k) / (1 - k);
+      const m = (1 - g - k) / (1 - k);
+      const y = (1 - b - k) / (1 - k);
+      
+      return {
+        c: Math.round(c * 100),
+        m: Math.round(m * 100),
+        y: Math.round(y * 100),
+        k: Math.round(k * 100)
+      };
+    }
+
+    // CMYK to RGB
+    function cmykToRgb(c, m, y, k) {
+      const r = 255 * (1 - c / 100) * (1 - k / 100);
+      const g = 255 * (1 - m / 100) * (1 - k / 100);
+      const b = 255 * (1 - y / 100) * (1 - k / 100);
+      return {
+        r: Math.round(r),
+        g: Math.round(g),
+        b: Math.round(b)
+      };
+    }
+
+    function updateFromHex(hex) {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const rgb = hexToRgb(hex);
+      if (rgb) {
+        colorPicker.value = hex;
+        colorPreview.style.backgroundColor = hex;
+        
+        rgbR.value = rgb.r;
+        rgbG.value = rgb.g;
+        rgbB.value = rgb.b;
+        
+        const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
+        cmykC.value = cmyk.c;
+        cmykM.value = cmyk.m;
+        cmykY.value = cmyk.y;
+        cmykK.value = cmyk.k;
+        
+        rgbOutput.textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+        cmykOutput.textContent = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+      }
+      
+      isUpdating = false;
+    }
+
+    function updateFromRgb() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const r = parseInt(rgbR.value) || 0;
+      const g = parseInt(rgbG.value) || 0;
+      const b = parseInt(rgbB.value) || 0;
+      
+      const hex = rgbToHex(r, g, b);
+      hexInput.value = hex;
+      colorPicker.value = hex;
+      colorPreview.style.backgroundColor = hex;
+      
+      const cmyk = rgbToCmyk(r, g, b);
+      cmykC.value = cmyk.c;
+      cmykM.value = cmyk.m;
+      cmykY.value = cmyk.y;
+      cmykK.value = cmyk.k;
+      
+      rgbOutput.textContent = `rgb(${r}, ${g}, ${b})`;
+      cmykOutput.textContent = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+      
+      isUpdating = false;
+    }
+
+    function updateFromCmyk() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const c = parseInt(cmykC.value) || 0;
+      const m = parseInt(cmykM.value) || 0;
+      const y = parseInt(cmykY.value) || 0;
+      const k = parseInt(cmykK.value) || 0;
+      
+      const rgb = cmykToRgb(c, m, y, k);
+      const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+      
+      hexInput.value = hex;
+      colorPicker.value = hex;
+      colorPreview.style.backgroundColor = hex;
+      rgbR.value = rgb.r;
+      rgbG.value = rgb.g;
+      rgbB.value = rgb.b;
+      
+      rgbOutput.textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+      cmykOutput.textContent = `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`;
+      
+      isUpdating = false;
+    }
+
+    function setColor(hex) {
+      hexInput.value = hex;
+      updateFromHex(hex);
+    }
+
+    function copyValue(elementId) {
+      const element = document.getElementById(elementId);
+      let text = '';
+      
+      if (elementId === 'hexInput') {
+        text = hexInput.value;
+      } else if (elementId === 'rgbOutput') {
+        text = rgbOutput.textContent;
+      } else if (elementId === 'cmykOutput') {
+        text = cmykOutput.textContent;
+      }
+      
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = event.target;
+          const original = btn.textContent;
+          btn.textContent = '✓';
+          setTimeout(() => btn.textContent = original, 1000);
+        });
+      }
+    }
+
+    // Event listeners
+    colorPicker.addEventListener('input', () => updateFromHex(colorPicker.value));
+    hexInput.addEventListener('input', () => {
+      const val = hexInput.value;
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        updateFromHex(val);
+      }
+    });
+    hexInput.addEventListener('change', () => {
+      if (!/^#[0-9A-Fa-f]{6}$/.test(hexInput.value)) {
+        hexInput.value = '#2563EB';
+        updateFromHex('#2563EB');
+      }
+    });
+
+    [rgbR, rgbG, rgbB].forEach(input => {
+      input.addEventListener('input', updateFromRgb);
+      input.addEventListener('change', () => {
+        input.value = Math.max(0, Math.min(255, parseInt(input.value) || 0));
+        updateFromRgb();
+      });
+    });
+
+    [cmykC, cmykM, cmykY, cmykK].forEach(input => {
+      input.addEventListener('input', updateFromCmyk);
+      input.addEventListener('change', () => {
+        input.value = Math.max(0, Math.min(100, parseInt(input.value) || 0));
+        updateFromCmyk();
+      });
+    });
+
+    // Initialize
+    updateFromHex('#2563EB');
+  </script>
+</body>
+</html>
