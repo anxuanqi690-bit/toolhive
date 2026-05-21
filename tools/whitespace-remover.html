@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whitespace Remover - Clean Extra Spaces from Text | ToolHive</title>
+  <meta name="description" content="Free online whitespace remover. Remove extra spaces, tabs, and line breaks from text instantly. See stats on cleaned characters.">
+  <meta name="keywords" content="whitespace remover, remove spaces, clean text, trim spaces, text cleaner">
+  <meta name="author" content="ToolHive">
+
+  <meta property="og:title" content="Whitespace Remover - ToolHive">
+  <meta property="og:description" content="Remove extra whitespace from text and see how much was cleaned.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧹</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🧹 Whitespace Remover</h1>
+        <p class="text-gray-600">Remove extra spaces, tabs, and line breaks from your text. All processing is done locally in your browser.</p>
+      </div>
+
+      <!-- Input -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Paste your text</label>
+        <textarea
+          id="inputText"
+          class="tool-input w-full"
+          rows="8"
+          placeholder="Paste text with extra spaces, tabs, or multiple line breaks here..."
+          oninput="cleanText()"
+        ></textarea>
+
+        <!-- Options -->
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <p class="text-sm font-medium text-gray-700 mb-3">Cleaning Options</p>
+          <div class="flex flex-wrap gap-6 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optMultipleSpaces" checked onchange="cleanText()" class="w-4 h-4 accent-primary">
+              <span>Multiple spaces → single</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optLeadingTrailing" checked onchange="cleanText()" class="w-4 h-4 accent-primary">
+              <span>Trim leading/trailing</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optMultipleNewlines" checked onchange="cleanText()" class="w-4 h-4 accent-primary">
+              <span>Multiple newlines → double</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optTabs" checked onchange="cleanText()" class="w-4 h-4 accent-primary">
+              <span>Tabs → spaces</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optMultipleNewlines2" checked onchange="cleanText()" class="w-4 h-4 accent-primary">
+              <span>Multiple newlines → single</span>
+            </label>
+          </div>
+          <div class="mt-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optAllNewlines" onchange="toggleNewlineMode()" class="w-4 h-4 accent-primary">
+              <span>Collapse all newlines into one space</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3 mt-4">
+          <button onclick="cleanText()" class="btn-primary">✨ Clean Text</button>
+          <button onclick="clearAll()" class="btn-secondary">🗑️ Clear</button>
+          <button onclick="loadSample()" class="btn-secondary">📥 Load Sample</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div id="statsRow" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-primary" id="statOriginal">0</div>
+          <div class="text-xs text-gray-500 mt-1">Original Chars</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-green-600" id="statClean">0</div>
+          <div class="text-xs text-gray-500 mt-1">Cleaned Chars</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-red-500" id="statRemoved">0</div>
+          <div class="text-xs text-gray-500 mt-1">Removed</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-gray-600" id="statSaved">0%</div>
+          <div class="text-xs text-gray-500 mt-1">Saved</div>
+        </div>
+      </div>
+
+      <!-- Output -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-sm font-medium text-gray-700">Cleaned Output</label>
+          <button onclick="copyOutput()" id="copyBtn" class="text-xs btn-secondary !py-1 !px-3">📋 Copy</button>
+        </div>
+        <textarea
+          id="outputText"
+          class="tool-output w-full"
+          rows="8"
+          readonly
+          placeholder="Cleaned text will appear here..."
+        ></textarea>
+      </div>
+
+      <!-- Try Other Tools -->
+      <section class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Try Other Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="text-counter.html" class="tool-card">
+            <div class="icon">📝</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Text Counter</h3>
+            <p class="text-gray-600 text-sm">Count characters, words, sentences, and paragraphs.</p>
+          </a>
+          <a href="slug-generator.html" class="tool-card">
+            <div class="icon">🌐</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Slug Generator</h3>
+            <p class="text-gray-600 text-sm">Generate SEO-friendly URL slugs from text.</p>
+          </a>
+          <a href="diff-checker.html" class="tool-card">
+            <div class="icon">📊</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Diff Checker</h3>
+            <p class="text-gray-600 text-sm">Compare two texts and highlight differences.</p>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-lg">🐝</span>
+        <span class="font-semibold text-gray-900">ToolHive</span>
+      </div>
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved. <a href="../privacy.html" class="hover:text-primary underline">Privacy</a> · <a href="../terms.html" class="hover:text-primary underline">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const sampleText = `This    is   some   text  with     extra     spaces.
+
+It also   has    multiple    line
+breaks   here
+
+and   there.
+
+     Lots   of   leading    and   trailing     spaces      here.     `;
+
+    function loadSample() {
+      document.getElementById('inputText').value = sampleText;
+      cleanText();
+    }
+
+    function toggleNewlineMode() {
+      const allNewlines = document.getElementById('optAllNewlines').checked;
+      const multilineOpt = document.getElementById('optMultipleNewlines');
+      const multilineOpt2 = document.getElementById('optMultipleNewlines2');
+      if (allNewlines) {
+        multilineOpt.checked = false;
+        multilineOpt2.checked = false;
+      }
+      cleanText();
+    }
+
+    function cleanText() {
+      const text = document.getElementById('inputText').value;
+      const originalLen = text.length;
+
+      if (!text) {
+        document.getElementById('outputText').value = '';
+        document.getElementById('statsRow').classList.add('hidden');
+        return;
+      }
+
+      let result = text;
+
+      // Tabs to spaces
+      if (document.getElementById('optTabs').checked) {
+        result = result.replace(/\t/g, ' ');
+      }
+
+      // Multiple spaces to single
+      if (document.getElementById('optMultipleSpaces').checked) {
+        result = result.replace(/  +/g, ' ');
+      }
+
+      // Leading/trailing on each line
+      if (document.getElementById('optLeadingTrailing').checked) {
+        result = result.split('\n').map(line => line.trim()).join('\n');
+      }
+
+      // Collapse all newlines to space
+      if (document.getElementById('optAllNewlines').checked) {
+        result = result.replace(/\n+/g, ' ').trim();
+      } else {
+        // Multiple newlines to single (or double)
+        if (document.getElementById('optMultipleNewlines2').checked) {
+          result = result.replace(/\n{2,}/g, '\n');
+        }
+      }
+
+      const cleanedLen = result.length;
+      const removed = originalLen - cleanedLen;
+      const savedPct = originalLen > 0 ? ((removed / originalLen) * 100).toFixed(1) : 0;
+
+      document.getElementById('outputText').value = result;
+      document.getElementById('statOriginal').textContent = originalLen.toLocaleString();
+      document.getElementById('statClean').textContent = cleanedLen.toLocaleString();
+      document.getElementById('statRemoved').textContent = removed.toLocaleString();
+      document.getElementById('statSaved').textContent = savedPct + '%';
+      document.getElementById('statsRow').classList.remove('hidden');
+    }
+
+    function copyOutput() {
+      const text = document.getElementById('outputText').value;
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    }
+
+    function clearAll() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('outputText').value = '';
+      document.getElementById('statsRow').classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

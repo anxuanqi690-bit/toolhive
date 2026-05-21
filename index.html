@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ToolHive - Free Online Tools - No Signup Required</title>
-  <meta name="description" content="ToolHive offers 16 free online tools including QR Code Generator, JSON Formatter, Image Compressor, Color Converter, and more. No signup required, no limits. Boost your productivity today!">
-  <meta name="keywords" content="free online tools, QR code generator, JSON formatter, color converter, text counter, base64 encoder, password generator, lorem ipsum, markdown preview, image compressor, image format converter, CSS gradient generator, timestamp converter, URL encoder, UUID generator, regex tester, unit converter">
+  <title>ToolHive - 22+ Free Online Tools - No Signup Required</title>
+  <meta name="description" content="ToolHive offers 22+ free online tools including QR Code Generator, JSON Formatter, Image Compressor, Hash Generator, PDF Viewer, Emoji Picker, and more. No signup required, no limits. Boost your productivity today!">
+  <meta name="keywords" content="free online tools, QR code generator, JSON formatter, color converter, text counter, base64 encoder, password generator, lorem ipsum, markdown preview, image compressor, image format converter, CSS gradient generator, timestamp converter, URL encoder, UUID generator, regex tester, unit converter, PDF viewer, emoji picker, hash generator, diff checker, whitespace remover, slug generator">
   <meta name="author" content="ToolHive">
   <meta name="robots" content="index, follow">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="ToolHive - Free Online Tools - No Signup Required">
-  <meta property="og:description" content="16 free online tools to boost your productivity. QR codes, JSON formatting, image compression, and more. No signup, no limits.">
+  <meta property="og:title" content="ToolHive - 22+ Free Online Tools - No Signup Required">
+  <meta property="og:description" content="22+ free online tools to boost your productivity. QR codes, JSON formatting, image compression, hash generation, PDF viewing, and more. No signup, no limits.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://toolhive.dev">
-  <meta property="og:image" content="https://toolhive.dev/og-image.png">
+  <meta property="og:url" content="https://toolhive-two.vercel.app">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ToolHive - Free Online Tools">
-  <meta name="twitter:description" content="16 free online tools to boost your productivity. No signup required.">
+  <meta name="twitter:title" content="ToolHive - 22+ Free Online Tools">
+  <meta name="twitter:description" content="22+ free online tools to boost your productivity. No signup required.">
   
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
@@ -49,7 +48,13 @@
           <span class="text-2xl">🐝</span>
           <span class="text-xl font-bold text-gray-900">ToolHive</span>
         </a>
-        <span class="text-sm text-gray-500 hidden sm:block">Free Online Tools</span>
+        <div class="flex items-center gap-6">
+          <a href="index.html" class="text-sm text-primary font-medium">Home</a>
+          <a href="about.html" class="text-sm text-gray-500 hover:text-primary">About</a>
+          <a href="contact.html" class="text-sm text-gray-500 hover:text-primary">Contact</a>
+          <a href="privacy.html" class="text-sm text-gray-500 hover:text-primary">Privacy</a>
+          <a href="terms.html" class="text-sm text-gray-500 hover:text-primary">Terms</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -62,8 +67,8 @@
         <span class="text-primary">No Signup, No Limits</span>
       </h1>
       <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-        Boost your productivity with 16 powerful free tools. QR codes, JSON formatting, 
-        image compression, color conversion, and more. All in your browser, no signup required.
+        Boost your productivity with 22+ powerful free tools. QR codes, JSON formatting, 
+        image compression, hash generation, PDF viewing, emoji picking, and more. All in your browser, no signup required.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a href="#tools" class="btn-primary">Browse All Tools →</a>
@@ -89,7 +94,7 @@
           <p class="text-gray-600 text-sm mb-4">Create QR codes instantly from any text or URL. Download as PNG image.</p>
           <span class="text-primary font-medium text-sm">Use Tool →</span>
         </a>
-
+	
         <!-- JSON Formatter -->
         <a href="tools/json-formatter.html" class="tool-card">
           <div class="icon">📋</div>
@@ -97,7 +102,7 @@
           <p class="text-gray-600 text-sm mb-4">Format, validate, and beautify your JSON data with one click.</p>
           <span class="text-primary font-medium text-sm">Use Tool →</span>
         </a>
-
+	
         <!-- Color Converter -->
         <a href="tools/color-converter.html" class="tool-card">
           <div class="icon">🎨</div>
@@ -193,7 +198,7 @@
           <p class="text-gray-600 text-sm mb-4">Generate UUID v4 strings instantly. Batch generation with copy support.</p>
           <span class="text-primary font-medium text-sm">Use Tool →</span>
         </a>
-
+	
         <!-- Regex Tester -->
         <a href="tools/regex-tester.html" class="tool-card">
           <div class="icon">🔍</div>
@@ -207,6 +212,54 @@
           <div class="icon">📐</div>
           <h3 class="text-lg font-semibold text-gray-900 mb-2">Unit Converter</h3>
           <p class="text-gray-600 text-sm mb-4">Convert length, weight, temperature, area, volume, and speed units.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: PDF Viewer -->
+        <a href="tools/pdf-viewer.html" class="tool-card">
+          <div class="icon">📄</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">PDF Viewer</h3>
+          <p class="text-gray-600 text-sm mb-4">View PDF files directly in your browser. No upload needed, fully private.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: Emoji Picker -->
+        <a href="tools/emoji-picker.html" class="tool-card">
+          <div class="icon">😀</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Emoji Picker</h3>
+          <p class="text-gray-600 text-sm mb-4">Browse all emojis by category, search instantly, and click to copy.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: Hash Generator -->
+        <a href="tools/hash-generator.html" class="tool-card">
+          <div class="icon">🔐</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Hash Generator</h3>
+          <p class="text-gray-600 text-sm mb-4">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: Diff Checker -->
+        <a href="tools/diff-checker.html" class="tool-card">
+          <div class="icon">📊</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Diff Checker</h3>
+          <p class="text-gray-600 text-sm mb-4">Compare two texts side by side and see differences highlighted instantly.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: Whitespace Remover -->
+        <a href="tools/whitespace-remover.html" class="tool-card">
+          <div class="icon">🧹</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Whitespace Remover</h3>
+          <p class="text-gray-600 text-sm mb-4">Remove extra spaces, tabs, and line breaks from text instantly.</p>
+          <span class="text-primary font-medium text-sm">Use Tool →</span>
+        </a>
+
+        <!-- NEW: Slug Generator -->
+        <a href="tools/slug-generator.html" class="tool-card">
+          <div class="icon">🌐</div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Slug Generator</h3>
+          <p class="text-gray-600 text-sm mb-4">Convert titles into SEO-friendly URL slugs. Supports Chinese to Pinyin.</p>
           <span class="text-primary font-medium text-sm">Use Tool →</span>
         </a>
 
@@ -248,8 +301,10 @@
         </div>
         <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
         <div class="flex gap-4 text-sm text-gray-500">
-          <a href="index.html" class="hover:text-primary">Home</a>
-          <a href="#tools" class="hover:text-primary">Tools</a>
+          <a href="about.html" class="hover:text-primary">About</a>
+          <a href="contact.html" class="hover:text-primary">Contact</a>
+          <a href="privacy.html" class="hover:text-primary">Privacy Policy</a>
+          <a href="terms.html" class="hover:text-primary">Terms of Service</a>
         </div>
       </div>
     </div>

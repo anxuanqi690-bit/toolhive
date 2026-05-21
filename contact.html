@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - ToolHive</title>
+  <meta name="description" content="Get in touch with the ToolHive team. Send us your questions, feedback, or bug reports. We're here to help.">
+  <meta name="keywords" content="contact toolhive, toolhive support, feedback, bug report, help">
+  <meta name="author" content="ToolHive">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="Contact Us - ToolHive">
+  <meta property="og:description" content="Get in touch with the ToolHive team. Questions, feedback, or bug reports welcome.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://toolhive-two.vercel.app/contact.html">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐝</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a href="index.html" class="text-sm text-gray-500 hover:text-primary">Home</a>
+          <a href="about.html" class="text-sm text-gray-500 hover:text-primary">About</a>
+          <a href="contact.html" class="text-sm text-primary font-medium">Contact</a>
+          <a href="privacy.html" class="text-sm text-gray-500 hover:text-primary">Privacy</a>
+          <a href="terms.html" class="text-sm text-gray-500 hover:text-primary">Terms</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="bg-gradient-to-b from-blue-50 to-white py-14 sm:py-20">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <div class="text-5xl mb-5">💬</div>
+      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">Get in Touch</h1>
+      <p class="text-lg text-gray-600">
+        Have a question, suggestion, or found a bug? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-12">
+    <div class="max-w-4xl mx-auto px-4">
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-3">
+          <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">Send us a message</h2>
+
+            <form id="contactForm" onsubmit="handleSubmit(event)">
+              <div class="space-y-5">
+                <!-- Name -->
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-gray-400">(optional)</span></label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Your name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+                  >
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address <span class="text-red-500">*</span></label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+                  >
+                  <p class="text-xs text-gray-500 mt-1">We'll use this to respond to your message. We never share your email.</p>
+                </div>
+
+                <!-- Subject -->
+                <div>
+                  <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject <span class="text-red-500">*</span></label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors bg-white"
+                  >
+                    <option value="" disabled selected>Select a topic</option>
+                    <option value="General Question">General Question</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Tool Suggestion">Tool Suggestion</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="Content Feedback">Content Feedback</option>
+                    <option value="Partnership / Business">Partnership / Business</option>
+                    <option value="Privacy Concern">Privacy Concern</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <!-- Message -->
+                <div>
+                  <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message <span class="text-red-500">*</span></label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="6"
+                    placeholder="Tell us what's on your mind..."
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none"
+                  ></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div>
+                  <button type="submit" id="submitBtn" class="btn-primary w-full sm:w-auto">
+                    ✉️ Send Message
+                  </button>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="hidden bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p class="text-green-700 font-medium">✅ Message ready to send!</p>
+                  <p class="text-green-600 text-sm mt-1">Your default email client will open with the message pre-filled. Please send it from your email app.</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Direct Contact -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h3 class="font-semibold text-gray-900 mb-4">📬 Direct Contact</h3>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">📧</span>
+                <div>
+                  <div class="text-sm font-medium text-gray-700">Email</div>
+                  <a href="mailto:support@toolhive.dev" class="text-sm text-primary hover:underline">support@toolhive.dev</a>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">🌐</span>
+                <div>
+                  <div class="text-sm font-medium text-gray-700">Website</div>
+                  <a href="https://toolhive-two.vercel.app" target="_blank" rel="noopener" class="text-sm text-primary hover:underline">toolhive-two.vercel.app</a>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-lg mt-0.5">⏰</span>
+                <div>
+                  <div class="text-sm font-medium text-gray-700">Response Time</div>
+                  <p class="text-sm text-gray-500">We typically respond within 1–3 business days.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What We Can Help With -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h3 class="font-semibold text-gray-900 mb-4">🤝 What We Can Help With</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Questions about our tools</li>
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Bug reports and technical issues</li>
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Suggestions for new tools</li>
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Feature requests</li>
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Privacy concerns</li>
+              <li class="flex items-start gap-2"><span class="text-green-500">✓</span> Partnership inquiries</li>
+            </ul>
+          </div>
+
+          <!-- What We Can't Help With -->
+          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">⚠️ Out of Scope</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span> Custom tool development requests</li>
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span> Troubleshooting your local computer</li>
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span> Individual file recovery</li>
+              <li class="flex items-start gap-2"><span class="text-red-400">✗</span> Billing or payment support (free tools)</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <section class="mt-16">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">Frequently Asked Questions</h2>
+          <p class="text-gray-600">Quick answers to common questions before you reach out.</p>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-4">
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">Is ToolHive really free? Do I need to sign up?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">Yes, ToolHive is 100% free and always will be. No signup, no account, no credit card required. Just open a tool and start using it.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">Is my data safe? Do you store my files?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">Absolutely not. All tools run entirely in your browser. Your files, text, and data never leave your device. We don't upload, store, or transmit any of your content. See our <a href="privacy.html" class="text-primary underline">Privacy Policy</a> for full details.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">I found a bug. How do I report it?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">We appreciate bug reports! Please use the contact form above and select "Bug Report" as the subject. Include the tool name, what you were trying to do, what happened, and your browser/version if possible. Screenshots are always helpful.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">Can you add a specific tool I need?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">We love tool suggestions! Use the contact form and select "Tool Suggestion" as the subject. While we can't guarantee we'll build every suggestion, we actively review all submissions and prioritize the most requested features.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">Will there ever be a paid version?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">All current tools will always remain free. In the future, we may add optional premium features for power users, but the core tools will never be paywalled. See our <a href="about.html" class="text-primary underline">About page</a> for more on our philosophy.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <button class="faq-toggle w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors" onclick="toggleFaq(this)">
+              <span class="font-medium text-gray-900">How do I remove ads from ToolHive?</span>
+              <span class="faq-icon text-gray-400 transition-transform duration-200">▼</span>
+            </button>
+            <div class="faq-content hidden px-6 pb-4">
+              <p class="text-gray-600 text-sm">We use advertising to keep ToolHive free. If you'd like to see fewer ads, you can install an ad blocker browser extension. We don't offer a paid ad-free tier, but we keep ads unobtrusive and relevant.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-8 mt-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🐝</span>
+          <span class="font-semibold text-gray-900">ToolHive</span>
+        </div>
+        <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+        <div class="flex gap-4 text-sm text-gray-500">
+          <a href="about.html" class="hover:text-primary">About</a>
+          <a href="privacy.html" class="hover:text-primary">Privacy Policy</a>
+          <a href="terms.html" class="hover:text-primary">Terms of Service</a>
+          <a href="contact.html" class="hover:text-primary">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      const form = document.getElementById('contactForm');
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value.trim();
+
+      const subjectLine = subject ? `[ToolHive] ${subject}` : '[ToolHive] Contact';
+      const body = `${message}
+
+---
+Name: ${name || '(not provided)'}
+Email: ${email}
+Subject: ${subject || '(not specified)'}
+ToolHive Contact Form`;
+
+      const mailtoLink = `mailto:support@toolhive.dev?subject=${encodeURIComponent(subjectLine)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoLink;
+
+      document.getElementById('successMessage').classList.remove('hidden');
+    }
+
+    function toggleFaq(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.faq-icon');
+      const isHidden = content.classList.contains('hidden');
+
+      // Close all
+      document.querySelectorAll('.faq-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.faq-icon').forEach(el => { el.style.transform = 'rotate(0deg)'; el.style.color = '#9CA3AF'; });
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+        icon.style.color = '#2563EB';
+      }
+    }
+  </script>
+
+</body>
+</html>

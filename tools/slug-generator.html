@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Slug Generator - Create SEO-Friendly URL Slugs | ToolHive</title>
+  <meta name="description" content="Free online URL slug generator. Convert any text into SEO-friendly, URL-safe slugs. Supports hyphens, underscores, and Chinese character conversion.">
+  <meta name="keywords" content="slug generator, url slug, seo friendly url, create slug, slugify">
+  <meta name="author" content="ToolHive">
+
+  <meta property="og:title" content="URL Slug Generator - ToolHive">
+  <meta property="og:description" content="Convert any title into a clean, SEO-friendly URL slug instantly.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .slug-output {
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 14px;
+      background: #F3F4F6;
+      border-radius: 6px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      user-select: all;
+      word-break: break-all;
+    }
+    .slug-output:hover { background: #EFF6FF; }
+    .slug-output.copied { background: #DCFCE7; }
+    .slug-type-btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; border: 1px solid #D1D5DB; background: white; cursor: pointer; transition: all 0.15s; }
+    .slug-type-btn:hover { background: #F9FAFB; }
+    .slug-type-btn.active { background: #2563EB; color: white; border-color: #2563EB; }
+  </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🌐 URL Slug Generator</h1>
+        <p class="text-gray-600">Convert any title or phrase into a clean, SEO-friendly URL slug. Works with English, Chinese, and other languages.</p>
+      </div>
+
+      <!-- Input -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Enter title text</label>
+        <textarea
+          id="inputText"
+          class="tool-input w-full"
+          rows="3"
+          placeholder="e.g. My Blog Post Title or 我的博客文章标题"
+          oninput="generateSlug()"
+        ></textarea>
+
+        <!-- Slug Type Toggle -->
+        <div class="mt-4 mb-3">
+          <p class="text-sm font-medium text-gray-700 mb-2">Slug separator style</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="slug-type-btn active" id="btnHyphen" onclick="setSeparator('-', 'btnHyphen')">kebab-case (hyphen)</button>
+            <button class="slug-type-btn" id="btnUnderscore" onclick="setSeparator('_', 'btnUnderscore')">snake_case (underscore)</button>
+            <button class="slug-type-btn" id="btnCamel" onclick="setCamelCase('btnCamel')">camelCase</button>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 mb-4">
+          <div class="flex flex-wrap gap-6 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optLowercase" checked onchange="generateSlug()" class="w-4 h-4 accent-primary">
+              <span>Lowercase</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optPinyin" onchange="generateSlug()" class="w-4 h-4 accent-primary">
+              <span>Chinese → Pinyin</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optRemoveStop" checked onchange="generateSlug()" class="w-4 h-4 accent-primary">
+              <span>Remove stop words</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="optMaxLen" checked onchange="generateSlug()" class="w-4 h-4 accent-primary">
+              <span>Limit length</span>
+              <input type="number" id="maxLenInput" value="60" min="10" max="200" onchange="generateSlug()" class="w-14 border border-gray-300 rounded px-2 py-0.5 text-xs" style="display:none">
+            </label>
+          </div>
+          <div id="maxLenRow" class="mt-2 text-xs text-gray-500">
+            Max length: <input type="number" id="maxLenInput2" value="60" min="10" max="200" onchange="generateSlug()" class="w-16 border border-gray-300 rounded px-2 py-0.5"> characters
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3">
+          <button onclick="generateSlug()" class="btn-primary">✨ Generate Slug</button>
+          <button onclick="clearAll()" class="btn-secondary">🗑️ Clear</button>
+          <button onclick="loadSample()" class="btn-secondary">📥 Load Sample</button>
+        </div>
+      </div>
+
+      <!-- Slug Output -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-sm font-medium text-gray-700">Generated Slug</label>
+          <button onclick="copySlug()" id="copyBtn" class="text-xs btn-secondary !py-1 !px-3">📋 Copy</button>
+        </div>
+        <div id="slugOutput" class="slug-output text-gray-700" onclick="copySlug()">
+          Enter a title above...
+        </div>
+        <p id="slugUrl" class="text-xs text-gray-400 mt-2 hidden"></p>
+      </div>
+
+      <!-- History -->
+      <div id="historySection" class="hidden">
+        <div class="flex justify-between items-center mb-3">
+          <p class="text-sm font-medium text-gray-700">Recent Slugs</p>
+          <button onclick="clearHistory()" class="text-xs text-gray-400 hover:text-red-500">Clear</button>
+        </div>
+        <div id="historyList" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Try Other Tools -->
+      <section class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Try Other Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="text-counter.html" class="tool-card">
+            <div class="icon">📝</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Text Counter</h3>
+            <p class="text-gray-600 text-sm">Count characters, words, sentences, and paragraphs.</p>
+          </a>
+          <a href="url-encoder.html" class="tool-card">
+            <div class="icon">🔗</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">URL Encoder</h3>
+            <p class="text-gray-600 text-sm">Encode and decode URLs safely.</p>
+          </a>
+          <a href="whitespace-remover.html" class="tool-card">
+            <div class="icon">🧹</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Whitespace Remover</h3>
+            <p class="text-gray-600 text-sm">Remove extra spaces from text.</p>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-lg">🐝</span>
+        <span class="font-semibold text-gray-900">ToolHive</span>
+      </div>
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved. <a href="../privacy.html" class="hover:text-primary underline">Privacy</a> · <a href="../terms.html" class="hover:text-primary underline">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    let separator = '-';
+    let mode = 'hyphen'; // hyphen, underscore, camel
+
+    const STOP_WORDS = new Set([
+      'a','an','and','as','at','but','by','for','if','in','is','it','of','on','or','the','to','with','was','were','will','from','have','has','had','not','this','that','these','those','be','been','being','are','been','do','does','did','so','such','than','too','very','can','just'
+    ]);
+
+    // Minimal pinyin lookup for common Chinese characters (subset)
+    const PINYIN_MAP = {
+      '我':'wo','你':'ni','他':'ta','她':'ta','它':'ta','们':'men','是':'shi','的':'de','了':'le','在':'zai','有':'you','和':'he','与':'yu','与':'yu','我':'wo','你':'ni','他':'ta','这':'zhe','那':'na','个':'ge','们':'men','不':'bu','会':'hui','能':'neng','为':'wei','的':'de','了':'le','在':'zai','有':'you','和':'he','与':'yu','一':'yi','二':'er','三':'san','四':'si','五':'wu','六':'liu','七':'qi','八':'ba','九':'jiu','十':'shi','百':'bai','千':'qian','万':'wan','元':'yuan','年':'nian','月':'yue','日':'ri','号':'hao','时':'shi','分':'fen','秒':'miao','中':'zhong','国':'guo','的':'de','人':'ren','们':'men','是':'shi','在':'zai','有':'you','我':'wo','你':'ni','他':'ta','她':'ta','它':'ta','我们':'women','你们':'nimen','他们':'tamen','她们':'tamen','它们':'tamen','网站':'wangzhan','博客':'boke','文章':'wenzhang','标题':'biaoti','内容':'neirong','免费':'mianfei','在线':'zaixian','工具':'gongju','生成':'shengcheng','创建':'chuangjian','使用':'shiyong','学习':'xuexi','开发':'kaifa','设计':'sheji','产品':'chanpin','服务':'fuwu','公司':'gongsi','个人':'geren','网站':'wangzhan','地址':'dizhi','搜索':'sousuo','引擎':'yin Qing','优化':'youhua','排名':'paiming','查看':'chakan','浏览':'liulan','分享':'fenxiang','下载':'xiazai','上传':'shangchuan','图片':'tupian','视频':'shipin','音乐':'yinyue','文档':'wendang','文件':'wenjian','标题':'biaoti','描述':'miaoshu','关键词':'guanjianci','标签':'biaoqian','分类':'fenlei','评论':'pinglun','用户':'yonghu','登录':'denglu','注册':'zhuce','密码':'mima','邮箱':'youxiang','手机':'shouji','电脑':'diannao','软件':'ruanjian','硬件':'yingjian','系统':'xitong','网络':'wangluo','数据':'shuju','安全':'anquan','隐私':'yinsi','性能':'xingneng','速度':'sudu','质量':'zhiliang','效果':'xiaoguo','帮助':'bangzhu','常见':'changjian','问题':'wenti','解答':'jieda','教程':'jiaocheng','视频':'shipin','文档':'wendang','博客':'boke','社区':'shequ','论坛':'luntan','新闻':'xinwen','资讯':'zixun','科技':'keji','技术':'jishu','创意':'chuangyi','设计':'sheji','开发':'kaifa','运营':'yunying','市场':'shichang','营销':'yingxiao','品牌':'pinpai','推广':'tuiguang','广告':'guanggao','合作':'hezuo','联系':'lianxi','支持':'zhichi','反馈':'fankui','建议':'jianyi','投诉':'tousu','举报':'jubao','感谢':'ganxie','欢迎':'huanying','再见':'zaijian','抱歉':'baoqian','对不起':'duibuqi','谢谢':'xiexie','请':'qing','您好':'ninhao','早上':'zaoshang','下午':'xiawu','晚上':'wanshang','今天':'jintian','明天':'mintian','昨天':'zuotian','现在':'xianzai','以后':'yihou','之前':'zhiqian','之后':'zhihou','里面':'limian','外面':'waimian','上面':'shangmian','下面':'xiamian','左边':'zuobian','右边':'youbian','前面':'qianmian','后面':'houmian','开始':'kaishi','结束':'jieshu','继续':'jixu','停止':'tingzhi','返回':'fanhui','取消':'quxiao','确认':'queren','保存':'baocun','删除':'shanchu','编辑':'bianji','复制':'fuzhi','粘贴':'zhantie','剪切':'jianqie','重命名':'zhongmingming','刷新':'shuaxin','加载':'jiazai','完成':'wancheng','成功':'chenggong','失败':'shibai','错误':'cuowu','警告':'jinggao','提示':'tishi','信息':'xinxi','关于':'guanyu','介绍':'jieshao','如何':'ruhe','为什么':'weishenme','怎么样':'zenmeyang','哪里':'nali','谁':'shei','什么':'shenme','哪个':'nage','多少':'duoshao','几':'ji','怎样':'zenyang'
+    };
+
+    function setSeparator(sep, btnId) {
+      separator = sep;
+      mode = 'hyphen';
+      document.querySelectorAll('.slug-type-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(btnId).classList.add('active');
+      generateSlug();
+    }
+
+    function setCamelCase(btnId) {
+      mode = 'camel';
+      document.querySelectorAll('.slug-type-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(btnId).classList.add('active');
+      generateSlug();
+    }
+
+    function toPinyin(text) {
+      let result = '';
+      for (const char of text) {
+        const code = char.charCodeAt(0);
+        if (code >= 0x4E00 && code <= 0x9FFF) {
+          result += (PINYIN_MAP[char] || char);
+        } else {
+          result += char;
+        }
+      }
+      return result;
+    }
+
+    function generateSlug() {
+      const input = document.getElementById('inputText').value;
+      if (!input.trim()) {
+        document.getElementById('slugOutput').textContent = 'Enter a title above...';
+        document.getElementById('slugUrl').classList.add('hidden');
+        return;
+      }
+
+      let text = input;
+
+      // Chinese to pinyin
+      if (document.getElementById('optPinyin').checked) {
+        text = toPinyin(text);
+      }
+
+      // Remove accents
+      text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+      // Convert to lowercase
+      if (document.getElementById('optLowercase').checked) {
+        text = text.toLowerCase();
+      }
+
+      // Replace non-alphanumeric with separator
+      text = text.replace(/[^a-zA-Z0-9\u4e00-\u9fff\s-]/g, ' ');
+
+      // Split into words
+      let words = text.split(/\s+/).filter(w => w.length > 0);
+
+      // Remove stop words
+      if (document.getElementById('optRemoveStop').checked) {
+        words = words.filter(w => !STOP_WORDS.has(w.toLowerCase()));
+      }
+
+      if (words.length === 0) {
+        document.getElementById('slugOutput').textContent = 'no-slug';
+        document.getElementById('slugUrl').classList.add('hidden');
+        return;
+      }
+
+      let slug;
+      if (mode === 'camel') {
+        slug = words.map((w, i) => i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
+      } else {
+        slug = words.join(separator);
+      }
+
+      // Limit length
+      const maxLen = parseInt(document.getElementById('maxLenInput2').value) || 60;
+      if (slug.length > maxLen) {
+        slug = slug.substring(0, maxLen);
+        // Trim trailing separator
+        slug = slug.replace(new RegExp(separator + '+$'), '');
+      }
+
+      document.getElementById('slugOutput').textContent = slug;
+      const urlPreview = document.getElementById('slugUrl');
+      urlPreview.textContent = `https://example.com/${slug}`;
+      urlPreview.classList.remove('hidden');
+
+      addToHistory(slug);
+    }
+
+    function copySlug() {
+      const slug = document.getElementById('slugOutput').textContent;
+      if (!slug || slug === 'Enter a title above...' || slug === 'no-slug') return;
+      navigator.clipboard.writeText(slug).then(() => {
+        const el = document.getElementById('slugOutput');
+        el.classList.add('copied');
+        const btn = document.getElementById('copyBtn');
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+          btn.textContent = orig;
+          el.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    function addToHistory(slug) {
+      let history = [];
+      try { history = JSON.parse(localStorage.getItem('toolhive_slug_history') || '[]'); } catch(e) {}
+      history = history.filter(s => s !== slug);
+      history.unshift(slug);
+      history = history.slice(0, 10);
+      localStorage.setItem('toolhive_slug_history', JSON.stringify(history));
+      renderHistory(history);
+    }
+
+    function renderHistory(history) {
+      const section = document.getElementById('historySection');
+      const list = document.getElementById('historyList');
+      if (history.length === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+      list.innerHTML = history.map(slug =>
+        `<button onclick="useHistorySlug('${slug}')" class="text-xs px-3 py-1.5 bg-gray-100 hover:bg-blue-50 border border-gray-200 rounded-full truncate max-w-[200px] transition-colors" title="${slug}">${slug}</button>`
+      ).join('');
+    }
+
+    function useHistorySlug(slug) {
+      document.getElementById('inputText').value = slug;
+      document.getElementById('slugOutput').textContent = slug;
+      document.getElementById('slugUrl').textContent = `https://example.com/${slug}`;
+      document.getElementById('slugUrl').classList.remove('hidden');
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('toolhive_slug_history');
+      document.getElementById('historySection').classList.add('hidden');
+    }
+
+    function loadSample() {
+      document.getElementById('inputText').value = 'How to Create SEO-Friendly URLs for Your Blog';
+      generateSlug();
+    }
+
+    function clearAll() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('slugOutput').textContent = 'Enter a title above...';
+      document.getElementById('slugUrl').classList.add('hidden');
+    }
+
+    // Init
+    try {
+      const history = JSON.parse(localStorage.getItem('toolhive_slug_history') || '[]');
+      renderHistory(history);
+    } catch(e) {}
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Viewer - View PDF Files Online | ToolHive</title>
+  <meta name="description" content="Free online PDF viewer. Upload and view PDF files directly in your browser. No upload to server, fast and private.">
+  <meta name="keywords" content="pdf viewer, online pdf viewer, view pdf, pdf reader, free pdf viewer">
+  <meta name="author" content="ToolHive">
+
+  <meta property="og:title" content="PDF Viewer - ToolHive">
+  <meta property="og:description" content="View PDF files instantly in your browser. Fast, private, no upload needed.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+  <style>
+    #pdf-canvas {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .page-input {
+      width: 60px;
+      text-align: center;
+      padding: 4px 8px;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+    }
+    .drop-zone {
+      border: 2px dashed #D1D5DB;
+      transition: all 0.3s ease;
+    }
+    .drop-zone.drag-over {
+      border-color: #2563EB;
+      background-color: #EFF6FF;
+    }
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📄 PDF Viewer</h1>
+        <p class="text-gray-600">View PDF files instantly in your browser — no upload needed. 100% private.</p>
+      </div>
+
+      <!-- Upload / Controls -->
+      <div class="mb-6">
+        <!-- Drop Zone (shown when no PDF loaded) -->
+        <div id="dropZone" class="drop-zone rounded-xl p-10 text-center cursor-pointer bg-gray-50 hover:bg-blue-50 transition-colors">
+          <div class="text-5xl mb-4">📂</div>
+          <p class="text-gray-700 font-medium mb-1">Drop a PDF file here</p>
+          <p class="text-gray-500 text-sm mb-4">or click to browse</p>
+          <input type="file" id="fileInput" accept=".pdf" class="hidden">
+          <button onclick="document.getElementById('fileInput').click()" class="btn-primary">Choose PDF File</button>
+        </div>
+
+        <!-- Toolbar (shown when PDF loaded) -->
+        <div id="toolbar" class="hidden bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <div class="controls-bar">
+            <!-- Page Navigation -->
+            <button onclick="prevPage()" class="btn-secondary !py-2 !px-3" title="Previous Page">◀</button>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-600">Page</span>
+              <input type="number" id="pageInput" class="page-input" value="1" min="1" onchange="goToPage(this.value)">
+              <span class="text-sm text-gray-600">of <span id="totalPages">0</span></span>
+            </div>
+            <button onclick="nextPage()" class="btn-secondary !py-2 !px-3" title="Next Page">▶</button>
+
+            <div class="w-px h-6 bg-gray-300 mx-2"></div>
+
+            <!-- Zoom -->
+            <button onclick="zoomOut()" class="btn-secondary !py-2 !px-3" title="Zoom Out">➖</button>
+            <span id="zoomLabel" class="text-sm text-gray-600 font-medium min-w-[48px] text-center">100%</span>
+            <button onclick="zoomIn()" class="btn-secondary !py-2 !px-3" title="Zoom In">➕</button>
+
+            <div class="w-px h-6 bg-gray-300 mx-2"></div>
+
+            <!-- File Info -->
+            <span id="fileName" class="text-sm text-gray-500 truncate max-w-[200px]"></span>
+
+            <div class="w-px h-6 bg-gray-300 mx-2"></div>
+
+            <!-- Open New -->
+            <button onclick="openNewFile()" class="btn-secondary !py-2 !px-3 text-sm">📂 Open New</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Container -->
+      <div id="canvasContainer" class="flex justify-center overflow-auto bg-gray-100 rounded-xl min-h-[400px] items-start p-4">
+        <canvas id="pdf-canvas"></canvas>
+      </div>
+
+      <!-- Status -->
+      <div id="status" class="text-center py-4 text-sm text-gray-500"></div>
+
+      <!-- No JS fallback -->
+      <noscript>
+        <div class="text-center p-10 bg-yellow-50 rounded-xl border border-yellow-200">
+          <p class="text-yellow-800 font-medium">JavaScript is required to use the PDF Viewer.</p>
+        </div>
+      </noscript>
+
+      <!-- Try Other Tools -->
+      <section class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Try Other Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="json-formatter.html" class="tool-card">
+            <div class="icon">📋</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">JSON Formatter</h3>
+            <p class="text-gray-600 text-sm">Format, validate, and beautify JSON data.</p>
+          </a>
+          <a href="image-compressor.html" class="tool-card">
+            <div class="icon">🖼️</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Image Compressor</h3>
+            <p class="text-gray-600 text-sm">Compress images without losing quality.</p>
+          </a>
+          <a href="markdown-preview.html" class="tool-card">
+            <div class="icon">📖</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Markdown Preview</h3>
+            <p class="text-gray-600 text-sm">Write and preview Markdown live.</p>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-lg">🐝</span>
+        <span class="font-semibold text-gray-900">ToolHive</span>
+      </div>
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved. <a href="../privacy.html" class="hover:text-primary underline">Privacy</a> · <a href="../terms.html" class="hover:text-primary underline">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let currentScale = 1.0;
+    const MIN_SCALE = 0.25;
+    const MAX_SCALE = 4.0;
+    const SCALE_STEP = 0.25;
+
+    const canvas = document.getElementById('pdf-canvas');
+    const ctx = canvas.getContext('2d');
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const toolbar = document.getElementById('toolbar');
+    const pageInput = document.getElementById('pageInput');
+    const totalPagesEl = document.getElementById('totalPages');
+    const zoomLabel = document.getElementById('zoomLabel');
+    const fileNameEl = document.getElementById('fileName');
+    const statusEl = document.getElementById('status');
+
+    // Drag & drop
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drag-over');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type === 'application/pdf') {
+        loadPDF(file);
+      } else {
+        showStatus('Please select a valid PDF file.', 'error');
+      }
+    });
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) loadPDF(e.target.files[0]);
+    });
+
+    function loadPDF(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const typedarray = new Uint8Array(e.target.result);
+        pdfjsLib.getDocument({ data: typedarray }).promise.then(function(pdf) {
+          pdfDoc = pdf;
+          currentPage = 1;
+          fileNameEl.textContent = file.name;
+          totalPagesEl.textContent = pdf.numPages;
+          pageInput.max = pdf.numPages;
+          dropZone.classList.add('hidden');
+          toolbar.classList.remove('hidden');
+          showStatus('');
+          renderPage(currentPage);
+        }).catch(function(error) {
+          showStatus('Error loading PDF. Please ensure the file is a valid PDF document.', 'error');
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function renderPage(num) {
+      if (!pdfDoc) return;
+      pdfDoc.getPage(num).then(function(page) {
+        const viewport = page.getViewport({ scale: currentScale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() {
+          pageInput.value = num;
+        });
+      });
+    }
+
+    function prevPage() {
+      if (currentPage <= 1) return;
+      currentPage--;
+      renderPage(currentPage);
+    }
+
+    function nextPage() {
+      if (!pdfDoc || currentPage >= pdfDoc.numPages) return;
+      currentPage++;
+      renderPage(currentPage);
+    }
+
+    function goToPage(num) {
+      const n = parseInt(num);
+      if (!pdfDoc || n < 1 || n > pdfDoc.numPages) return;
+      currentPage = n;
+      renderPage(currentPage);
+    }
+
+    function zoomIn() {
+      if (currentScale >= MAX_SCALE) return;
+      currentScale = Math.min(MAX_SCALE, currentScale + SCALE_STEP);
+      zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      renderPage(currentPage);
+    }
+
+    function zoomOut() {
+      if (currentScale <= MIN_SCALE) return;
+      currentScale = Math.max(MIN_SCALE, currentScale - SCALE_STEP);
+      zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      renderPage(currentPage);
+    }
+
+    function openNewFile() {
+      pdfDoc = null;
+      currentPage = 1;
+      currentScale = 1.0;
+      zoomLabel.textContent = '100%';
+      dropZone.classList.remove('hidden');
+      toolbar.classList.add('hidden');
+      fileInput.value = '';
+      canvas.height = 0;
+      canvas.width = 0;
+      showStatus('');
+    }
+
+    function showStatus(msg, type) {
+      statusEl.textContent = msg;
+      statusEl.className = 'text-center py-4 text-sm ' + (type === 'error' ? 'text-red-500' : 'text-gray-500');
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (!pdfDoc) return;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevPage();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextPage();
+      if (e.key === '+' || e.key === '=') zoomIn();
+      if (e.key === '-') zoomOut();
+    });
+  </script>
+
+</body>
+</html>

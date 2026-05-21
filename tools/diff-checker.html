@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Diff Checker - Compare Text Differences Online | ToolHive</title>
+  <meta name="description" content="Free online text diff checker. Compare two texts side by side and highlight differences instantly. Works entirely in your browser.">
+  <meta name="keywords" content="diff checker, text compare, text difference, diff tool, compare text">
+  <meta name="author" content="ToolHive">
+
+  <meta property="og:title" content="Text Diff Checker - ToolHive">
+  <meta property="og:description" content="Compare two texts and see differences highlighted instantly.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .diff-output {
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 200px;
+    }
+    .diff-added {
+      background-color: #DCFCE7;
+      color: #166534;
+      border-left: 3px solid #22C55E;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+    .diff-removed {
+      background-color: #FEE2E2;
+      color: #991B1B;
+      border-left: 3px solid #EF4444;
+      padding: 1px 6px;
+      border-radius: 3px;
+      text-decoration: line-through;
+    }
+    .diff-equal {
+      color: #374151;
+    }
+    .diff-line-num {
+      color: #9CA3AF;
+      user-select: none;
+      min-width: 32px;
+      display: inline-block;
+    }
+    .diff-summary-added { color: #16A34A; font-weight: 600; }
+    .diff-summary-removed { color: #DC2626; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 Text Diff Checker</h1>
+        <p class="text-gray-600">Compare two texts and see differences highlighted line by line. All processing is done locally.</p>
+      </div>
+
+      <!-- Input Area -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Original Text (Left)</label>
+            <button onclick="loadSampleLeft()" class="text-xs text-primary hover:underline">📥 Load Sample</button>
+          </div>
+          <textarea id="textLeft" class="tool-input w-full" rows="10" placeholder="Paste original text here..." oninput="runDiff()"></textarea>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Modified Text (Right)</label>
+            <button onclick="loadSampleRight()" class="text-xs text-primary hover:underline">📥 Load Sample</button>
+          </div>
+          <textarea id="textRight" class="tool-input w-full" rows="10" placeholder="Paste modified text here..." oninput="runDiff()"></textarea>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button onclick="runDiff()" class="btn-primary">⚡ Compare</button>
+        <button onclick="clearAll()" class="btn-secondary">🗑️ Clear</button>
+        <button onclick="swapTexts()" class="btn-secondary">⇄ Swap</button>
+      </div>
+
+      <!-- Summary -->
+      <div id="diffSummary" class="mb-4 text-sm text-center hidden">
+        <span class="diff-summary-added">+ <span id="addedCount">0</span> added</span>
+        <span class="mx-3 text-gray-300">|</span>
+        <span class="diff-summary-removed">− <span id="removedCount">0</span> removed</span>
+        <span class="mx-3 text-gray-300">|</span>
+        <span class="text-gray-600"><span id="equalCount">0</span> unchanged</span>
+      </div>
+
+      <!-- Diff Output -->
+      <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div class="bg-gray-50 border-b border-gray-200 px-4 py-2 flex justify-between items-center">
+          <span class="text-sm font-medium text-gray-700">Diff Result</span>
+          <button onclick="copyDiff()" id="copyDiffBtn" class="text-xs btn-secondary !py-1 !px-3">📋 Copy</button>
+        </div>
+        <div id="diffOutput" class="diff-output p-4 text-sm">
+          <span class="text-gray-400 italic">Enter text in both boxes and click "Compare" to see differences...</span>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-4 flex gap-6 justify-center text-xs">
+        <span><span class="diff-added">added line</span></span>
+        <span><span class="diff-removed">removed line</span></span>
+        <span><span class="diff-equal">unchanged</span></span>
+      </div>
+
+      <!-- Try Other Tools -->
+      <section class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Try Other Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="json-formatter.html" class="tool-card">
+            <div class="icon">📋</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">JSON Formatter</h3>
+            <p class="text-gray-600 text-sm">Format, validate, and beautify JSON data.</p>
+          </a>
+          <a href="text-counter.html" class="tool-card">
+            <div class="icon">📝</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Text Counter</h3>
+            <p class="text-gray-600 text-sm">Count characters, words, sentences, and paragraphs.</p>
+          </a>
+          <a href="whitespace-remover.html" class="tool-card">
+            <div class="icon">🧹</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Whitespace Remover</h3>
+            <p class="text-gray-600 text-sm">Remove extra spaces and clean up text.</p>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-lg">🐝</span>
+        <span class="font-semibold text-gray-900">ToolHive</span>
+      </div>
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved. <a href="../privacy.html" class="hover:text-primary underline">Privacy</a> · <a href="../terms.html" class="hover:text-primary underline">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const sampleLeft = `Hello World
+This is the original document.
+It has multiple lines.
+Some content here.
+The quick brown fox jumps.
+Goodbye`;
+
+    const sampleRight = `Hello World
+This is the modified document.
+It has multiple lines with changes.
+Extra content added.
+The quick brown fox jumps over the lazy dog.
+Goodbye for now`;
+
+    function loadSampleLeft() {
+      document.getElementById('textLeft').value = sampleLeft;
+      runDiff();
+    }
+
+    function loadSampleRight() {
+      document.getElementById('textRight').value = sampleRight;
+      runDiff();
+    }
+
+    function swapTexts() {
+      const left = document.getElementById('textLeft');
+      const right = document.getElementById('textRight');
+      const temp = left.value;
+      left.value = right.value;
+      right.value = temp;
+      runDiff();
+    }
+
+    function clearAll() {
+      document.getElementById('textLeft').value = '';
+      document.getElementById('textRight').value = '';
+      document.getElementById('diffOutput').innerHTML = '<span class="text-gray-400 italic">Enter text in both boxes and click "Compare" to see differences...</span>';
+      document.getElementById('diffSummary').classList.add('hidden');
+    }
+
+    // Simple Myers-like line-level diff algorithm
+    function computeLCS(a, b) {
+      const m = a.length, n = b.length;
+      const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          if (a[i - 1] === b[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+      return dp;
+    }
+
+    function backtrack(dp, a, b, i, j) {
+      if (i === 0 && j === 0) return [];
+      if (i === 0) return [...backtrack(dp, a, b, i, j - 1), { type: 'added', line: b[j - 1], lineNum: j }];
+      if (j === 0) return [...backtrack(dp, a, b, i - 1, j), { type: 'removed', line: a[i - 1], lineNum: i }];
+      if (a[i - 1] === b[j - 1]) return [...backtrack(dp, a, b, i - 1, j - 1), { type: 'equal', line: a[i - 1], lineNum: i }];
+      if (dp[i - 1][j] >= dp[i][j - 1]) return [...backtrack(dp, a, b, i - 1, j), { type: 'removed', line: a[i - 1], lineNum: i }];
+      return [...backtrack(dp, a, b, i, j - 1), { type: 'added', line: b[j - 1], lineNum: j }];
+    }
+
+    function runDiff() {
+      const left = document.getElementById('textLeft').value;
+      const right = document.getElementById('textRight').value;
+
+      if (!left && !right) {
+        document.getElementById('diffOutput').innerHTML = '<span class="text-gray-400 italic">Enter text in both boxes and click "Compare" to see differences...</span>';
+        document.getElementById('diffSummary').classList.add('hidden');
+        return;
+      }
+
+      const leftLines = left.split('\n');
+      const rightLines = right.split('\n');
+
+      const dp = computeLCS(leftLines, rightLines);
+      const diff = backtrack(dp, leftLines, rightLines, leftLines.length, rightLines.length);
+
+      let added = 0, removed = 0, equal = 0;
+      let html = '';
+
+      diff.forEach(item => {
+        const escaped = escapeHtml(item.line || '');
+        const lineNum = item.lineNum || '';
+        if (item.type === 'added') {
+          added++;
+          html += `<div><span class="diff-line-num">${lineNum}</span> <span class="diff-added">+ ${escaped}</span></div>`;
+        } else if (item.type === 'removed') {
+          removed++;
+          html += `<div><span class="diff-line-num">${lineNum}</span> <span class="diff-removed">− ${escaped}</span></div>`;
+        } else {
+          equal++;
+          html += `<div><span class="diff-line-num">${lineNum}</span> <span class="diff-equal">  ${escaped}</span></div>`;
+        }
+      });
+
+      document.getElementById('diffOutput').innerHTML = html;
+      document.getElementById('addedCount').textContent = added;
+      document.getElementById('removedCount').textContent = removed;
+      document.getElementById('equalCount').textContent = equal;
+      document.getElementById('diffSummary').classList.remove('hidden');
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function copyDiff() {
+      const output = document.getElementById('diffOutput');
+      const text = output.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyDiffBtn');
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    }
+  </script>
+
+</body>
+</html>

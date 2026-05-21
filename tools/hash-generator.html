@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hash Generator - MD5, SHA-1, SHA-256, SHA-512 | ToolHive</title>
+  <meta name="description" content="Free online hash generator. Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text. Fast, client-side, and private.">
+  <meta name="keywords" content="hash generator, md5, sha-1, sha-256, sha-512, hash calculator, online hash">
+  <meta name="author" content="ToolHive">
+
+  <meta property="og:title" content="Hash Generator - ToolHive">
+  <meta property="og:description" content="Generate MD5, SHA-1, SHA-256, SHA-512 hashes instantly in your browser.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .hash-output {
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 12px;
+      word-break: break-all;
+      min-height: 60px;
+      background: #F3F4F6;
+      border-radius: 6px;
+      padding: 10px 12px;
+      line-height: 1.8;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      user-select: all;
+    }
+    .hash-output:hover { background: #EFF6FF; }
+    .hash-output.copied { background: #DCFCE7; }
+    .hash-label { font-family: 'Monaco', 'Menlo', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+    .hash-row { display: grid; grid-template-columns: 80px 1fr 40px; gap: 8px; align-items: start; }
+  </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🔐 Hash Generator</h1>
+        <p class="text-gray-600">Enter text below to generate MD5, SHA-1, SHA-256, and SHA-512 hashes. All processing is done locally in your browser.</p>
+      </div>
+
+      <!-- Input -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Enter text to hash</label>
+        <textarea
+          id="inputText"
+          class="tool-input w-full"
+          placeholder="Type or paste your text here..."
+          rows="4"
+          oninput="generateHashes()"
+        ></textarea>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3 mt-4">
+          <button onclick="generateHashes()" class="btn-primary">🔄 Generate</button>
+          <button onclick="clearInput()" class="btn-secondary">🗑️ Clear</button>
+          <label class="btn-secondary cursor-pointer text-center">
+            📁 Load File
+            <input type="file" class="hidden" onchange="loadFile(this.files[0])">
+          </label>
+        </div>
+
+        <p id="fileName" class="text-xs text-gray-400 mt-2 hidden"></p>
+      </div>
+
+      <!-- Hash Results -->
+      <div id="resultsArea" class="space-y-3">
+        <!-- MD5 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="hash-label text-gray-500 uppercase">MD5</span>
+            <button onclick="copyHash('md5')" class="copy-btn text-xs btn-secondary !py-1 !px-3" data-target="md5">📋 Copy</button>
+          </div>
+          <div id="md5" class="hash-output text-gray-700" onclick="copyHash('md5')">Enter text above...</div>
+        </div>
+
+        <!-- SHA-1 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="hash-label text-gray-500 uppercase">SHA-1</span>
+            <button onclick="copyHash('sha1')" class="copy-btn text-xs btn-secondary !py-1 !px-3" data-target="sha1">📋 Copy</button>
+          </div>
+          <div id="sha1" class="hash-output text-gray-700" onclick="copyHash('sha1')">Enter text above...</div>
+        </div>
+
+        <!-- SHA-256 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="hash-label text-gray-500 uppercase">SHA-256</span>
+            <button onclick="copyHash('sha256')" class="copy-btn text-xs btn-secondary !py-1 !px-3" data-target="sha256">📋 Copy</button>
+          </div>
+          <div id="sha256" class="hash-output text-gray-700" onclick="copyHash('sha256')">Enter text above...</div>
+        </div>
+
+        <!-- SHA-512 -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="hash-label text-gray-500 uppercase">SHA-512</span>
+            <button onclick="copyHash('sha512')" class="copy-btn text-xs btn-secondary !py-1 !px-3" data-target="sha512">📋 Copy</button>
+          </div>
+          <div id="sha512" class="hash-output text-gray-700" onclick="copyHash('sha512')">Enter text above...</div>
+        </div>
+      </div>
+
+      <!-- Info Box -->
+      <div class="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-5">
+        <h3 class="font-semibold text-gray-900 mb-2">🔒 How does this work?</h3>
+        <p class="text-sm text-gray-600 mb-2">
+          This tool generates cryptographic hash digests using industry-standard algorithms. Hashes are one-way functions — you cannot reverse a hash to recover the original text.
+        </p>
+        <div class="grid grid-cols-2 gap-3 text-xs text-gray-600">
+          <div><strong>MD5:</strong> 128-bit (32 hex chars). Deprecated for security use.</div>
+          <div><strong>SHA-1:</strong> 160-bit (40 hex chars). Deprecated for security use.</div>
+          <div><strong>SHA-256:</strong> 256-bit (64 hex chars). Widely used for security.</div>
+          <div><strong>SHA-512:</strong> 512-bit (128 hex chars). Highest security level here.</div>
+        </div>
+      </div>
+
+      <!-- Try Other Tools -->
+      <section class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Try Other Tools</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="base64.html" class="tool-card">
+            <div class="icon">🔐</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Base64 Encoder</h3>
+            <p class="text-gray-600 text-sm">Encode and decode Base64 text and files.</p>
+          </a>
+          <a href="password-generator.html" class="tool-card">
+            <div class="icon">🔑</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Password Generator</h3>
+            <p class="text-gray-600 text-sm">Generate strong, secure passwords instantly.</p>
+          </a>
+          <a href="url-encoder.html" class="tool-card">
+            <div class="icon">🔗</div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">URL Encoder</h3>
+            <p class="text-gray-600 text-sm">Encode and decode URLs safely.</p>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-lg">🐝</span>
+        <span class="font-semibold text-gray-900">ToolHive</span>
+      </div>
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved. <a href="../privacy.html" class="hover:text-primary underline">Privacy</a> · <a href="../terms.html" class="hover:text-primary underline">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // MD5 implementation (public domain, from Joseph Myers)
+    function md5cycle(x, k) {
+      let a = x[0], b = x[1], c = x[2], d = x[3];
+      a = ff(a, b, c, d, k[0], 7, -680876936);
+      d = ff(d, a, b, c, k[1], 12, -389564586);
+      c = ff(c, d, a, b, k[2], 17, 606105819);
+      b = ff(b, c, d, a, k[3], 22, -1044525330);
+      a = ff(a, b, c, d, k[4], 7, -176418897);
+      d = ff(d, a, b, c, k[5], 12, 1200080426);
+      c = ff(c, d, a, b, k[6], 17, -1473231341);
+      b = ff(b, c, d, a, k[7], 22, -45705983);
+      a = ff(a, b, c, d, k[8], 7, 1770035416);
+      d = ff(d, a, b, c, k[9], 12, -1958414417);
+      c = ff(c, d, a, b, k[10], 17, -42063);
+      b = ff(b, c, d, a, k[11], 22, -1990404162);
+      a = ff(a, b, c, d, k[12], 7, 1804603682);
+      d = ff(d, a, b, c, k[13], 12, -40341101);
+      c = ff(c, d, a, b, k[14], 17, -1502002290);
+      b = ff(b, c, d, a, k[15], 22, 1236535329);
+      a = gg(a, b, c, d, k[1], 5, -165796510);
+      d = gg(d, a, b, c, k[6], 9, -1069501632);
+      c = gg(c, d, a, b, k[11], 14, 643717713);
+      b = gg(b, c, d, a, k[0], 20, -373897302);
+      a = gg(a, b, c, d, k[5], 5, -701558691);
+      d = gg(d, a, b, c, k[10], 9, 38016083);
+      c = gg(c, d, a, b, k[15], 14, -660478335);
+      b = gg(b, c, d, a, k[4], 20, -405537848);
+      a = gg(a, b, c, d, k[9], 5, 568446438);
+      d = gg(d, a, b, c, k[14], 9, -1019803690);
+      c = gg(c, d, a, b, k[3], 14, -187363961);
+      b = gg(b, c, d, a, k[8], 20, 1163531501);
+      a = gg(a, b, c, d, k[13], 5, -1444681467);
+      d = gg(d, a, b, c, k[2], 9, -51403784);
+      c = gg(c, d, a, b, k[7], 14, 1735328473);
+      b = gg(b, c, d, a, k[12], 20, -1926607734);
+      a = hh(a, b, c, d, k[5], 4, -378558);
+      d = hh(d, a, b, c, k[8], 11, -2022574463);
+      c = hh(c, d, a, b, k[11], 16, 1839030562);
+      b = hh(b, c, d, a, k[14], 23, -35309556);
+      a = hh(a, b, c, d, k[1], 4, -1530992060);
+      d = hh(d, a, b, c, k[4], 11, 1272893353);
+      c = hh(c, d, a, b, k[7], 16, -155497632);
+      b = hh(b, c, d, a, k[10], 23, -1094730640);
+      a = hh(a, b, c, d, k[13], 4, 681279174);
+      d = hh(d, a, b, c, k[0], 11, -358537222);
+      c = hh(c, d, a, b, k[3], 16, -722521979);
+      b = hh(b, c, d, a, k[6], 23, 76029189);
+      a = hh(a, b, c, d, k[9], 4, -640364487);
+      d = hh(d, a, b, c, k[12], 11, -421815835);
+      c = hh(c, d, a, b, k[15], 16, 530742520);
+      b = hh(b, c, d, a, k[2], 23, -995338651);
+      a = ii(a, b, c, d, k[0], 6, -198630844);
+      d = ii(d, a, b, c, k[7], 10, 1126891415);
+      c = ii(c, d, a, b, k[14], 15, -1416354905);
+      b = ii(b, c, d, a, k[5], 21, -57434055);
+      a = ii(a, b, c, d, k[12], 6, 1700485571);
+      d = ii(d, a, b, c, k[3], 10, -1894986606);
+      c = ii(c, d, a, b, k[10], 15, -1051523);
+      b = ii(b, c, d, a, k[1], 21, -2054922799);
+      a = ii(a, b, c, d, k[8], 6, 1873313359);
+      d = ii(d, a, b, c, k[15], 10, -30611744);
+      c = ii(c, d, a, b, k[6], 15, -1560198380);
+      b = ii(b, c, d, a, k[13], 21, 1309151649);
+      a = ii(a, b, c, d, k[4], 6, -145523070);
+      d = ii(d, a, b, c, k[11], 10, -1120210379);
+      c = ii(c, d, a, b, k[2], 15, 718787259);
+      b = ii(b, c, d, a, k[9], 21, -343485551);
+      x[0] = add32(a, x[0]); x[1] = add32(b, x[1]); x[2] = add32(c, x[2]); x[3] = add32(d, x[3]);
+    }
+    function cmn(q, a, b, x, s, t) {
+      a = add32(add32(a, q), add32(x, t));
+      return add32((a << s) | (a >>> (32 - s)), b);
+    }
+    function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
+    function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
+    function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
+    function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
+    function md5blk(s) {
+      const md5blks = [];
+      for (let i = 0; i < 64; i += 4) {
+        md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
+      }
+      return md5blks;
+    }
+    const md5blktab = [7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21];
+    const md5rtab = [0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x2441453, 0xd8a1e681, 0xe7d3fbc8, 0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x4881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665, 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391];
+    function add32(a, b) { return (a + b) & 0xffffffff; }
+    function md5(s) {
+      s = decodeUTF8(s);
+      const n = s.length;
+      let state = [1732584193, -271733879, -1732584194, 271733878];
+      let i;
+      for (i = 64; i <= n; i += 64) {
+        md5cycle(state, md5blk(s.substring(i - 64, i)));
+      }
+      s = s.substring(i - 64);
+      const tail = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      for (i = 0; i < s.length; i++) tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
+      tail[i >> 2] |= 0x80 << ((i % 4) << 3);
+      if (i > 55) { md5cycle(state, tail); for (i = 0; i < 16; i++) tail[i] = 0; }
+      tail[14] = n * 8;
+      md5cycle(state, tail);
+      return toHex(state[0]) + toHex(state[1]) + toHex(state[2]) + toHex(state[3]);
+    }
+    function decodeUTF8(s) {
+      return unescape(encodeURIComponent(s));
+    }
+    function toHex(n) {
+      const hex = '0123456789abcdef';
+      let s = '';
+      for (let i = 0; i < 4; i++) s += hex.charAt((n >> (i * 8 + 4)) & 0xf) + hex.charAt((n >> (i * 8)) & 0xf);
+      return s;
+    }
+
+    // SHA-1 using Web Crypto API polyfill approach (simple JS impl)
+    async function sha1Legacy(text) {
+      const msgBuffer = new TextEncoder().encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function sha256(text) {
+      const msgBuffer = new TextEncoder().encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function sha512(text) {
+      const msgBuffer = new TextEncoder().encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-512', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    let currentHashes = {};
+
+    async function generateHashes() {
+      const text = document.getElementById('inputText').value;
+      if (!text) {
+        document.getElementById('md5').textContent = 'Enter text above...';
+        document.getElementById('sha1').textContent = 'Enter text above...';
+        document.getElementById('sha256').textContent = 'Enter text above...';
+        document.getElementById('sha512').textContent = 'Enter text above...';
+        currentHashes = {};
+        return;
+      }
+
+      const md5Result = md5(text);
+      const sha1Result = await sha1Legacy(text);
+      const sha256Result = await sha256(text);
+      const sha512Result = await sha512(text);
+
+      currentHashes = { md5: md5Result, sha1: sha1Result, sha256: sha256Result, sha512: sha512Result };
+
+      document.getElementById('md5').textContent = md5Result;
+      document.getElementById('sha1').textContent = sha1Result;
+      document.getElementById('sha256').textContent = sha256Result;
+      document.getElementById('sha512').textContent = sha512Result;
+    }
+
+    function copyHash(type) {
+      const value = currentHashes[type];
+      if (!value) return;
+      navigator.clipboard.writeText(value).then(() => {
+        flashCopied(type);
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        flashCopied(type);
+      });
+    }
+
+    function flashCopied(type) {
+      const el = document.getElementById(type);
+      el.classList.add('copied');
+      const btn = document.querySelector(`.copy-btn[data-target="${type}"]`);
+      if (btn) { const orig = btn.textContent; btn.textContent = '✅ Copied!'; setTimeout(() => { btn.textContent = orig; }, 1500); }
+      setTimeout(() => el.classList.remove('copied'), 1500);
+    }
+
+    function clearInput() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('fileName').classList.add('hidden');
+      generateHashes();
+    }
+
+    function loadFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('inputText').value = '';
+        const fn = document.getElementById('fileName');
+        fn.textContent = `📄 ${file.name} (${formatBytes(file.size)})`;
+        fn.classList.remove('hidden');
+        // Read as binary string for hashing
+        const data = e.target.result;
+        document.getElementById('inputText').value = `[Binary file: ${file.name} — ${formatBytes(file.size)}]\n\n(Hex of first 1KB)\n` + bytesToHex(data.slice(0, 1024));
+        generateHashes();
+      };
+      reader.readAsBinaryString(file);
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function bytesToHex(str) {
+      let result = '';
+      for (let i = 0; i < str.length && i < 1024; i++) {
+        result += str.charCodeAt(i).toString(16).padStart(2, '0');
+      }
+      return result;
+    }
+  </script>
+
+</body>
+</html>

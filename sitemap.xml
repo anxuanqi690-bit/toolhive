@@ -6,6 +6,26 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://toolhive-two.vercel.app/about.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/contact.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/terms.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://toolhive-two.vercel.app/tools/qr-generator.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -82,6 +102,36 @@
   </url>
   <url>
     <loc>https://toolhive-two.vercel.app/tools/unit-converter.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/pdf-viewer.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/emoji-picker.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/hash-generator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/diff-checker.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/whitespace-remover.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toolhive-two.vercel.app/tools/slug-generator.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
