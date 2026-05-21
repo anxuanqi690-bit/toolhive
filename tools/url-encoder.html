@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Encoder/Decoder - Encode URL Strings | ToolHive</title>
+  <meta name="description" content="Free URL encoder and decoder. Encode and decode URLs using encodeURIComponent or encodeURI. Real-time conversion in your browser.">
+  <meta name="keywords" content="URL encoder, URL decoder, URL encode, encodeURI, URL encoding, percent encoding, URI encoder">
+  <meta property="og:title" content="URL Encoder/Decoder - ToolHive">
+  <meta property="og:description" content="Encode and decode URLs instantly in your browser.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🔗 URL Encoder/Decoder</h1>
+        <p class="text-gray-600">Encode and decode URL strings instantly</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Mode Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Mode</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="mode-option selected">
+              <input type="radio" name="mode" value="encode" checked class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg mb-1">🔒</div>
+                <div class="text-sm font-medium">Encode</div>
+              </div>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="mode" value="decode" class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg mb-1">🔓</div>
+                <div class="text-sm font-medium">Decode</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Method Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Method</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="method-option selected">
+              <input type="radio" name="method" value="component" checked class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                <div class="text-sm font-medium mb-1">encodeURIComponent</div>
+                <div class="text-xs text-gray-500">Encodes special characters like ? & = /</div>
+              </div>
+            </label>
+            <label class="method-option">
+              <input type="radio" name="method" value="uri" class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                <div class="text-sm font-medium mb-1">encodeURI</div>
+                <div class="text-xs text-gray-500">Leaves some characters unencoded</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Input</label>
+            <button onclick="clearInput()" class="text-sm text-gray-500 hover:text-primary">Clear</button>
+          </div>
+          <textarea id="inputText" class="tool-input" placeholder="Enter URL or text to encode/decode..."></textarea>
+        </div>
+
+        <!-- Convert Button -->
+        <button onclick="convert()" class="btn-primary w-full mb-4">⚡ Convert</button>
+
+        <!-- Output -->
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Output</label>
+            <button onclick="copyOutput()" class="text-sm text-primary hover:underline">📋 Copy</button>
+          </div>
+          <div id="outputText" class="tool-output" style="min-height: 120px; word-break: break-all;">-</div>
+        </div>
+
+        <!-- Swap Button -->
+        <button onclick="swapIO()" class="btn-secondary w-full mb-4">⇅ Swap Input/Output</button>
+
+        <!-- Common Patterns -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Quick Examples</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="loadExample('Hello World!')" class="p-3 bg-white rounded-lg border border-gray-200 text-left hover:border-primary transition-colors">
+              <div class="text-xs text-gray-500">Hello World!</div>
+              <div class="text-sm font-mono truncate">Hello%20World!</div>
+            </button>
+            <button onclick="loadExample('name=John Doe&age=30')" class="p-3 bg-white rounded-lg border border-gray-200 text-left hover:border-primary transition-colors">
+              <div class="text-xs text-gray-500">Query String</div>
+              <div class="text-sm font-mono truncate">name=John%20Doe...</div>
+            </button>
+            <button onclick="loadExample('https://example.com/path?q=search')" class="p-3 bg-white rounded-lg border border-gray-200 text-left hover:border-primary transition-colors">
+              <div class="text-xs text-gray-500">Full URL</div>
+              <div class="text-sm font-mono truncate">https%3A%2F%2F...</div>
+            </button>
+            <button onclick="loadExample('emoji: 😀 🚀 🎉')" class="p-3 bg-white rounded-lg border border-gray-200 text-left hover:border-primary transition-colors">
+              <div class="text-xs text-gray-500">With Emoji</div>
+              <div class="text-sm font-mono truncate">%F0%9F%98%80...</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• <strong>encodeURIComponent:</strong> Use for individual values like query params</li>
+          <li>• <strong>encodeURI:</strong> Use for complete URLs (keeps :// unencoded)</li>
+          <li>• Spaces become %20, special chars become %XX</li>
+          <li>• All conversion happens in your browser</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="base64.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔐</span>
+            <span>Base64 Encoder</span>
+          </a>
+          <a href="timestamp-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">⏱️</span>
+            <span>Timestamp Converter</span>
+          </a>
+          <a href="json-formatter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📋</span>
+            <span>JSON Formatter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .mode-option.selected .border-2,
+    .method-option.selected .border-2 {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+    }
+  </style>
+
+  <script>
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const modeOptions = document.querySelectorAll('.mode-option');
+    const methodOptions = document.querySelectorAll('.method-option');
+
+    // Mode selection
+    modeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        modeOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        if (inputText.value) convert();
+      });
+    });
+
+    // Method selection
+    methodOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        methodOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        if (inputText.value) convert();
+      });
+    });
+
+    // Real-time conversion
+    inputText.addEventListener('input', convert);
+
+    function convert() {
+      const input = inputText.value;
+      if (!input) {
+        outputText.textContent = '-';
+        return;
+      }
+
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const method = document.querySelector('input[name="method"]:checked').value;
+
+      try {
+        if (mode === 'encode') {
+          if (method === 'component') {
+            outputText.textContent = encodeURIComponent(input);
+          } else {
+            outputText.textContent = encodeURI(input);
+          }
+        } else {
+          if (method === 'component') {
+            outputText.textContent = decodeURIComponent(input);
+          } else {
+            outputText.textContent = decodeURI(input);
+          }
+        }
+      } catch (e) {
+        outputText.textContent = 'Error: Invalid encoded string';
+      }
+    }
+
+    function clearInput() {
+      inputText.value = '';
+      outputText.textContent = '-';
+      inputText.focus();
+    }
+
+    function copyOutput() {
+      const text = outputText.textContent;
+      if (text && text !== '-') {
+        navigator.clipboard.writeText(text);
+      }
+    }
+
+    function swapIO() {
+      const output = outputText.textContent;
+      if (output && output !== '-') {
+        inputText.value = output;
+        // Toggle mode
+        const currentMode = document.querySelector('input[name="mode"]:checked').value;
+        const newMode = currentMode === 'encode' ? 'decode' : 'encode';
+        modeOptions.forEach(o => o.classList.remove('selected'));
+        document.querySelector(`input[name="mode"][value="${newMode}"]`).parentElement.classList.add('selected');
+        convert();
+      }
+    }
+
+    function loadExample(text) {
+      inputText.value = text;
+      convert();
+    }
+  </script>
+</body>
+</html>

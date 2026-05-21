@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Format Converter - Convert JPG PNG WEBP | ToolHive</title>
+  <meta name="description" content="Free online image format converter. Convert images between PNG, JPG, and WEBP formats instantly. No quality loss, download converted images.">
+  <meta name="keywords" content="image format converter, convert image format, PNG to JPG, JPG to PNG, WEBP converter, image conversion">
+  <meta property="og:title" content="Image Format Converter - ToolHive">
+  <meta property="og:description" content="Convert images between PNG, JPG, and WEBP formats instantly.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔄</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🔄 Image Format Converter</h1>
+        <p class="text-gray-600">Convert images between PNG, JPG, and WEBP formats</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Upload Area -->
+        <div class="mb-6">
+          <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors">
+            <input type="file" id="fileInput" accept="image/*" class="hidden">
+            <div class="text-4xl mb-3">📁</div>
+            <p class="text-gray-600 mb-2">Drag & drop an image here or click to browse</p>
+            <p class="text-sm text-gray-400">Supports PNG, JPG, WEBP, GIF, BMP</p>
+          </div>
+        </div>
+
+        <!-- Format Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Target Format</label>
+          <div class="grid grid-cols-3 gap-3">
+            <label class="format-option selected">
+              <input type="radio" name="format" value="image/png" checked class="hidden">
+              <div class="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-2xl mb-1">PNG</div>
+                <div class="text-xs text-gray-500">Lossless</div>
+              </div>
+            </label>
+            <label class="format-option">
+              <input type="radio" name="format" value="image/jpeg" class="hidden">
+              <div class="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-2xl mb-1">JPG</div>
+                <div class="text-xs text-gray-500">Smaller</div>
+              </div>
+            </label>
+            <label class="format-option">
+              <input type="radio" name="format" value="image/webp" class="hidden">
+              <div class="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-2xl mb-1">WEBP</div>
+                <div class="text-xs text-gray-500">Modern</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="mb-6">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-2 text-center">Original</p>
+              <div class="bg-gray-200 rounded-lg overflow-hidden min-h-[150px] flex items-center justify-center">
+                <img id="originalPreview" src="" alt="Original" class="max-w-full max-h-[150px] hidden">
+                <span id="originalPlaceholder" class="text-gray-400">No image</span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2 text-center" id="originalInfo">-</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-2 text-center">Converted</p>
+              <div class="bg-gray-200 rounded-lg overflow-hidden min-h-[150px] flex items-center justify-center">
+                <img id="convertedPreview" src="" alt="Converted" class="max-w-full max-h-[150px] hidden">
+                <span id="convertedPlaceholder" class="text-gray-400">No image</span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2 text-center" id="convertedInfo">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Button -->
+        <button id="downloadBtn" onclick="downloadConverted()" class="btn-primary w-full mb-4" disabled>⬇️ Download Converted Image</button>
+      </div>
+
+      <!-- Tips -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• PNG: Best for graphics with transparency</li>
+          <li>• JPG: Best for photos, smaller file size</li>
+          <li>• WEBP: Modern format, best compression</li>
+          <li>• Images are converted entirely in your browser</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="image-compressor.html" class="related-tool-card">
+            <span class="text-xl mr-2">🖼️</span>
+            <span>Image Compressor</span>
+          </a>
+          <a href="qr-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">📱</span>
+            <span>QR Generator</span>
+          </a>
+          <a href="color-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🎨</span>
+            <span>Color Converter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .format-option.selected .border-2 {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+    }
+  </style>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const originalPreview = document.getElementById('originalPreview');
+    const convertedPreview = document.getElementById('convertedPreview');
+    const originalPlaceholder = document.getElementById('originalPlaceholder');
+    const convertedPlaceholder = document.getElementById('convertedPlaceholder');
+    const originalInfo = document.getElementById('originalInfo');
+    const convertedInfo = document.getElementById('convertedInfo');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const formatOptions = document.querySelectorAll('.format-option');
+
+    let originalFile = null;
+    let originalDataUrl = '';
+    let convertedBlob = null;
+
+    // Format option selection
+    formatOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        formatOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        if (originalFile) convertImage();
+      });
+    });
+
+    // Click to upload
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelect);
+
+    // Drag and drop
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-primary', 'bg-blue-50');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-primary', 'bg-blue-50');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-primary', 'bg-blue-50');
+      if (e.dataTransfer.files.length) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.match(/^image\//)) {
+          processImage(file);
+        }
+      }
+    });
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processImage(file);
+    }
+
+    function processImage(file) {
+      originalFile = file;
+      originalInfo.textContent = file.type.split('/')[1].toUpperCase() + ' • ' + formatBytes(file.size);
+      originalPlaceholder.classList.add('hidden');
+      originalPreview.classList.remove('hidden');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        originalDataUrl = e.target.result;
+        originalPreview.src = originalDataUrl;
+        convertImage();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function convertImage() {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        
+        // Fill with white for JPG (no transparency)
+        const targetFormat = document.querySelector('input[name="format"]:checked').value;
+        if (targetFormat === 'image/jpeg') {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob((blob) => {
+          convertedBlob = blob;
+          const dataUrl = URL.createObjectURL(blob);
+          convertedPreview.src = dataUrl;
+          convertedPlaceholder.classList.add('hidden');
+          convertedPreview.classList.remove('hidden');
+          
+          const ext = targetFormat.split('/')[1];
+          convertedInfo.textContent = ext.toUpperCase() + ' • ' + formatBytes(blob.size);
+          downloadBtn.disabled = false;
+        }, targetFormat, 0.92);
+      };
+      img.src = originalDataUrl;
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function downloadConverted() {
+      const targetFormat = document.querySelector('input[name="format"]:checked').value;
+      const ext = targetFormat.split('/')[1];
+      const baseName = originalFile.name.replace(/\.[^/.]+$/, '');
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(convertedBlob);
+      link.download = baseName + '_converted.' + ext;
+      link.click();
+    }
+  </script>
+</body>
+</html>

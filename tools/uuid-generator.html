@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UUID Generator - Generate UUID v4 | ToolHive</title>
+  <meta name="description" content="Free UUID generator. Generate UUID v4 instantly. Create single or batch UUIDs (1-50). Copy to clipboard with uppercase/lowercase and hyphen options.">
+  <meta name="keywords" content="UUID generator, UUID v4, generate UUID, UUID generator online, unique ID generator, GUID generator">
+  <meta property="og:title" content="UUID Generator - ToolHive">
+  <meta property="og:description" content="Generate UUID v4 instantly. Single or batch generation.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🆔</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🆔 UUID Generator</h1>
+        <p class="text-gray-600">Generate UUID v4 strings instantly</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- UUID Display -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Generated UUID</label>
+          <div id="uuidDisplay" class="font-mono text-lg p-4 bg-white rounded-lg border border-gray-200 break-all select-all" style="user-select: all;">Click generate below</div>
+        </div>
+
+        <!-- Count Selection -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Number of UUIDs</label>
+            <span class="text-lg font-bold text-primary" id="countValue">1</span>
+          </div>
+          <input type="range" id="countSlider" min="1" max="50" value="1" class="w-full">
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>1</span>
+            <span>50</span>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="mb-6 grid grid-cols-2 gap-4">
+          <label class="flex items-center gap-3 cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors">
+            <input type="checkbox" id="uppercase" class="w-5 h-5 text-primary rounded">
+            <span class="text-sm">UPPERCASE</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer p-3 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors">
+            <input type="checkbox" id="hyphens" checked class="w-5 h-5 text-primary rounded">
+            <span class="text-sm">With Hyphens</span>
+          </label>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="generateUUIDs()" class="btn-primary w-full mb-4">⚡ Generate UUIDs</button>
+
+        <!-- All UUIDs Display (for batch) -->
+        <div id="batchDisplay" class="mb-4 hidden">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">All UUIDs</label>
+            <span class="text-sm text-gray-500" id="batchCount">0 UUIDs</span>
+          </div>
+          <div id="uuidsList" class="tool-output text-xs max-h-64 overflow-y-auto" style="min-height: auto;"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+          <button onclick="copySingle()" class="btn-secondary flex-1">📋 Copy Single</button>
+          <button onclick="copyAll()" class="btn-secondary flex-1">📋 Copy All</button>
+        </div>
+      </div>
+
+      <!-- UUID Info -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">📚 About UUID v4</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• <strong>Version 4:</strong> Randomly generated using cryptographically secure random numbers</li>
+          <li>• <strong>Format:</strong> 8-4-4-4-12 characters (36 chars with hyphens)</li>
+          <li>• <strong>Uniqueness:</strong> Extremely low probability of collision</li>
+          <li>• <strong>Example:</strong> 550e8400-e29b-41d4-a716-446655440000</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="password-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔑</span>
+            <span>Password Generator</span>
+          </a>
+          <a href="regex-tester.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔍</span>
+            <span>Regex Tester</span>
+          </a>
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const countSlider = document.getElementById('countSlider');
+    const countValue = document.getElementById('countValue');
+    const uuidDisplay = document.getElementById('uuidDisplay');
+    const batchDisplay = document.getElementById('batchDisplay');
+    const uuidsList = document.getElementById('uuidsList');
+    const batchCount = document.getElementById('batchCount');
+    const uppercase = document.getElementById('uppercase');
+    const hyphens = document.getElementById('hyphens');
+
+    let currentUUIDs = [];
+
+    // Count slider
+    countSlider.addEventListener('input', () => {
+      countValue.textContent = countSlider.value;
+    });
+
+    // Options listeners
+    uppercase.addEventListener('change', () => {
+      if (currentUUIDs.length > 0) {
+        updateDisplay();
+      }
+    });
+
+    hyphens.addEventListener('change', () => {
+      if (currentUUIDs.length > 0) {
+        updateDisplay();
+      }
+    });
+
+    function generateUUID() {
+      // Use crypto API if available, fallback to Math.random
+      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      
+      // Fallback implementation
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function generateUUIDs() {
+      const count = parseInt(countSlider.value);
+      currentUUIDs = [];
+      
+      for (let i = 0; i < count; i++) {
+        currentUUIDs.push(generateUUID());
+      }
+      
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      let uuids = [...currentUUIDs];
+      
+      // Apply uppercase
+      if (uppercase.checked) {
+        uuids = uuids.map(u => u.toUpperCase());
+      }
+      
+      // Apply hyphen removal
+      if (!hyphens.checked) {
+        uuids = uuids.map(u => u.replace(/-/g, ''));
+      }
+      
+      // Update single display
+      uuidDisplay.textContent = uuids[0];
+      
+      // Update batch display
+      if (currentUUIDs.length > 1) {
+        batchDisplay.classList.remove('hidden');
+        uuidsList.innerHTML = uuids.map(u => `<div class="py-1 border-b border-gray-100 last:border-0">${u}</div>`).join('');
+        batchCount.textContent = uuids.length + ' UUIDs';
+      } else {
+        batchDisplay.classList.add('hidden');
+      }
+    }
+
+    function copySingle() {
+      const text = uuidDisplay.textContent;
+      if (text && text !== 'Click generate below') {
+        navigator.clipboard.writeText(text);
+      }
+    }
+
+    function copyAll() {
+      if (currentUUIDs.length === 0) return;
+      
+      let uuids = [...currentUUIDs];
+      if (uppercase.checked) {
+        uuids = uuids.map(u => u.toUpperCase());
+      }
+      if (!hyphens.checked) {
+        uuids = uuids.map(u => u.replace(/-/g, ''));
+      }
+      
+      navigator.clipboard.writeText(uuids.join('\n'));
+    }
+  </script>
+</body>
+</html>

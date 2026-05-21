@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Compressor - Compress JPG PNG WEBP | ToolHive</title>
+  <meta name="description" content="Free online image compressor. Compress JPG, PNG, and WEBP images instantly. Adjust quality with a slider, preview results, and download compressed images.">
+  <meta name="keywords" content="image compressor, compress images, JPG compressor, PNG compressor, WEBP compressor, reduce image size">
+  <meta property="og:title" content="Image Compressor - ToolHive">
+  <meta property="og:description" content="Compress your images instantly. Adjust quality and download compressed files.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🖼️ Image Compressor</h1>
+        <p class="text-gray-600">Compress JPG, PNG, and WEBP images with adjustable quality</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Upload Area -->
+        <div class="mb-6">
+          <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors">
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" class="hidden">
+            <div class="text-4xl mb-3">📁</div>
+            <p class="text-gray-600 mb-2">Drag & drop an image here or click to browse</p>
+            <p class="text-sm text-gray-400">Supports JPG, PNG, WEBP</p>
+          </div>
+        </div>
+
+        <!-- Quality Slider -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-sm font-medium text-gray-700">Compression Quality</label>
+            <span class="text-lg font-bold text-primary" id="qualityValue">80%</span>
+          </div>
+          <input 
+            type="range" 
+            id="qualitySlider" 
+            min="1" 
+            max="100" 
+            value="80"
+            class="w-full"
+          >
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>Smallest File</span>
+            <span>Best Quality</span>
+          </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="mb-6">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-2 text-center">Original</p>
+              <div class="bg-gray-200 rounded-lg overflow-hidden min-h-[150px] flex items-center justify-center">
+                <img id="originalPreview" src="" alt="Original" class="max-w-full max-h-[150px] hidden">
+                <span id="originalPlaceholder" class="text-gray-400">No image</span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2 text-center" id="originalSize">-</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-2 text-center">Compressed</p>
+              <div class="bg-gray-200 rounded-lg overflow-hidden min-h-[150px] flex items-center justify-center">
+                <img id="compressedPreview" src="" alt="Compressed" class="max-w-full max-h-[150px] hidden">
+                <span id="compressedPlaceholder" class="text-gray-400">No image</span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2 text-center" id="compressedSize">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div id="statsSection" class="mb-6 hidden">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="savedPercent">0%</div>
+              <div class="stat-label">Size Saved</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="savedKB">0 KB</div>
+              <div class="stat-label">Saved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Button -->
+        <button id="downloadBtn" onclick="downloadCompressed()" class="btn-primary w-full mb-4" disabled>⬇️ Download Compressed Image</button>
+      </div>
+
+      <!-- Tips -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• Higher quality = larger file size</li>
+          <li>• 70-80% quality usually gives good balance</li>
+          <li>• PNG will be converted to JPG for best compression</li>
+          <li>• Images are processed entirely in your browser</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="image-format-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔄</span>
+            <span>Format Converter</span>
+          </a>
+          <a href="qr-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">📱</span>
+            <span>QR Generator</span>
+          </a>
+          <a href="color-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🎨</span>
+            <span>Color Converter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualityValue = document.getElementById('qualityValue');
+    const originalPreview = document.getElementById('originalPreview');
+    const compressedPreview = document.getElementById('compressedPreview');
+    const originalPlaceholder = document.getElementById('originalPlaceholder');
+    const compressedPlaceholder = document.getElementById('compressedPlaceholder');
+    const originalSize = document.getElementById('originalSize');
+    const compressedSize = document.getElementById('compressedSize');
+    const statsSection = document.getElementById('statsSection');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const savedPercent = document.getElementById('savedPercent');
+    const savedKB = document.getElementById('savedKB');
+
+    let originalFile = null;
+    let originalDataUrl = '';
+    let compressedDataUrl = '';
+
+    // Click to upload
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelect);
+
+    // Drag and drop
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-primary', 'bg-blue-50');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-primary', 'bg-blue-50');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-primary', 'bg-blue-50');
+      if (e.dataTransfer.files.length) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.match(/^image\/(jpeg|png|webp)$/)) {
+          processImage(file);
+        }
+      }
+    });
+
+    // Quality slider
+    qualitySlider.addEventListener('input', () => {
+      qualityValue.textContent = qualitySlider.value + '%';
+      if (originalFile) compressImage();
+    });
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processImage(file);
+    }
+
+    function processImage(file) {
+      originalFile = file;
+      originalSize.textContent = formatBytes(file.size);
+      originalPlaceholder.classList.add('hidden');
+      originalPreview.classList.remove('hidden');
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        originalDataUrl = e.target.result;
+        originalPreview.src = originalDataUrl;
+        compressImage();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function compressImage() {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        const quality = parseInt(qualitySlider.value) / 100;
+        const outputType = 'image/jpeg';
+
+        canvas.toBlob((blob) => {
+          compressedDataUrl = URL.createObjectURL(blob);
+          compressedPreview.src = compressedDataUrl;
+          compressedPlaceholder.classList.add('hidden');
+          compressedPreview.classList.remove('hidden');
+          compressedSize.textContent = formatBytes(blob.size);
+
+          // Stats
+          statsSection.classList.remove('hidden');
+          const saved = originalFile.size - blob.size;
+          const percent = Math.round((saved / originalFile.size) * 100);
+          savedPercent.textContent = percent + '%';
+          savedKB.textContent = formatBytes(saved);
+          savedPercent.style.color = percent > 0 ? 'var(--primary)' : '#6B7280';
+
+          downloadBtn.disabled = false;
+        }, outputType, quality);
+      };
+      img.src = originalDataUrl;
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function downloadCompressed() {
+      const link = document.createElement('a');
+      link.href = compressedDataUrl;
+      const ext = originalFile.name.split('.').pop();
+      const baseName = originalFile.name.replace(/\.[^/.]+$/, '');
+      link.download = baseName + '_compressed.jpg';
+      link.click();
+    }
+  </script>
+</body>
+</html>

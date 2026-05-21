@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tester - Test Regular Expressions | ToolHive</title>
+  <meta name="description" content="Free regex tester. Test regular expressions against text with real-time highlighting. View match groups, indices, and support for all flags (g/i/m/s).">
+  <meta name="keywords" content="regex tester, regular expression tester, regex match, regex pattern, regular expression validator, online regex">
+  <meta property="og:title" content="Regex Tester - ToolHive">
+  <meta property="og:description" content="Test regular expressions with real-time highlighting.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🔍 Regex Tester</h1>
+        <p class="text-gray-600">Test regular expressions with real-time matching</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Pattern Input -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Regular Expression</label>
+          <div class="flex gap-2">
+            <span class="inline-flex items-center px-3 bg-gray-200 text-gray-600 rounded-l-lg font-mono">/</span>
+            <input type="text" id="patternInput" placeholder="Enter regex pattern..." class="tool-input flex-1 rounded-none font-mono" style="min-height: auto;">
+            <span class="inline-flex items-center px-3 bg-gray-200 text-gray-600 font-mono">/</span>
+            <div id="flagsDisplay" class="inline-flex items-center px-3 bg-gray-200 text-gray-600 rounded-r-lg font-mono min-w-[60px] justify-center">g</div>
+          </div>
+        </div>
+
+        <!-- Flags Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Flags</label>
+          <div class="grid grid-cols-4 gap-3">
+            <label class="flag-option selected">
+              <input type="checkbox" id="flagG" checked class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg font-mono font-bold">g</div>
+                <div class="text-xs text-gray-500">Global</div>
+              </div>
+            </label>
+            <label class="flag-option">
+              <input type="checkbox" id="flagI" class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg font-mono font-bold">i</div>
+                <div class="text-xs text-gray-500">Case Insensitive</div>
+              </div>
+            </label>
+            <label class="flag-option">
+              <input type="checkbox" id="flagM" class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg font-mono font-bold">m</div>
+                <div class="text-xs text-gray-500">Multiline</div>
+              </div>
+            </label>
+            <label class="flag-option">
+              <input type="checkbox" id="flagS" class="hidden">
+              <div class="p-3 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-primary transition-colors">
+                <div class="text-lg font-mono font-bold">s</div>
+                <div class="text-xs text-gray-500">DotAll</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Test Text -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Test Text</label>
+          <textarea id="testText" class="tool-input" placeholder="Enter text to test against the regex..." style="min-height: 150px;"></textarea>
+        </div>
+
+        <!-- Highlighted Result -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Highlighted Matches</label>
+          <div id="highlightedResult" class="p-4 bg-white rounded-lg border border-gray-200 min-h-[150px] whitespace-pre-wrap font-mono text-sm">-</div>
+        </div>
+
+        <!-- Match Stats -->
+        <div class="mb-6">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="matchCount">0</div>
+              <div class="stat-label">Matches</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="matchLength">0</div>
+              <div class="stat-label">Total Chars</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="execTime">0ms</div>
+              <div class="stat-label">Time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Match Details -->
+        <div id="matchDetails" class="hidden">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Match Details</label>
+          <div id="matchList" class="space-y-2"></div>
+        </div>
+
+        <!-- Quick Patterns -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Quick Patterns</label>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="loadPattern('[a-z]+')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">Email</button>
+            <button onclick="loadPattern('\\d{3}-\\d{3}-\\d{4}')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">Phone</button>
+            <button onclick="loadPattern('https?://[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">URL</button>
+            <button onclick="loadPattern('\\d+\\.\\d{2}')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">Price</button>
+            <button onclick="loadPattern('#[0-9A-Fa-f]{6}')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">Hex Color</button>
+            <button onclick="loadPattern('\\d{4}-\\d{2}-\\d{2}')" class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm hover:border-primary transition-colors">Date</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Regex Tips</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• <strong>g</strong> (global): Find all matches, not just the first</li>
+          <li>• <strong>i</strong> (case insensitive): Match uppercase and lowercase</li>
+          <li>• <strong>m</strong> (multiline): ^ and $ match line starts/ends</li>
+          <li>• <strong>s</strong> (dotAll): Dot matches newline characters</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="json-formatter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📋</span>
+            <span>JSON Formatter</span>
+          </a>
+          <a href="text-counter.html" class="related-tool-card">
+            <span class="text-xl mr-2">📝</span>
+            <span>Text Counter</span>
+          </a>
+          <a href="url-encoder.html" class="related-tool-card">
+            <span class="text-xl mr-2">🔗</span>
+            <span>URL Encoder</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .flag-option.selected .border-2 {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+    }
+    .match-highlight {
+      background: rgba(37, 99, 235, 0.3);
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+  </style>
+
+  <script>
+    const patternInput = document.getElementById('patternInput');
+    const testText = document.getElementById('testText');
+    const highlightedResult = document.getElementById('highlightedResult');
+    const matchCount = document.getElementById('matchCount');
+    const matchLength = document.getElementById('matchLength');
+    const execTime = document.getElementById('execTime');
+    const matchDetails = document.getElementById('matchDetails');
+    const matchList = document.getElementById('matchList');
+    const flagsDisplay = document.getElementById('flagsDisplay');
+    const flagOptions = document.querySelectorAll('.flag-option');
+
+    // Real-time testing
+    patternInput.addEventListener('input', testRegex);
+    testText.addEventListener('input', testRegex);
+
+    // Flag toggles
+    flagOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const checkbox = option.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        option.classList.toggle('selected', checkbox.checked);
+        updateFlagsDisplay();
+        testRegex();
+      });
+    });
+
+    function updateFlagsDisplay() {
+      let flags = '';
+      ['flagG', 'flagI', 'flagM', 'flagS'].forEach(id => {
+        if (document.getElementById(id).checked) {
+          flags += id.replace('flag', '').toLowerCase();
+        }
+      });
+      flagsDisplay.textContent = flags || '-';
+    }
+
+    function getFlags() {
+      let flags = '';
+      if (document.getElementById('flagG').checked) flags += 'g';
+      if (document.getElementById('flagI').checked) flags += 'i';
+      if (document.getElementById('flagM').checked) flags += 'm';
+      if (document.getElementById('flagS').checked) flags += 's';
+      return flags;
+    }
+
+    function testRegex() {
+      const pattern = patternInput.value;
+      const text = testText.value;
+
+      if (!pattern || !text) {
+        highlightedResult.innerHTML = text || '-';
+        matchCount.textContent = '0';
+        matchLength.textContent = '0';
+        execTime.textContent = '0ms';
+        matchDetails.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const startTime = performance.now();
+        const regex = new RegExp(pattern, getFlags());
+        const matches = [...text.matchAll(regex)];
+        const endTime = performance.now();
+
+        // Highlight matches
+        let highlighted = '';
+        let lastIndex = 0;
+        matches.forEach(match => {
+          highlighted += escapeHtml(text.slice(lastIndex, match.index));
+          highlighted += `<span class="match-highlight">${escapeHtml(match[0])}</span>`;
+          lastIndex = match.index + match[0].length;
+        });
+        highlighted += escapeHtml(text.slice(lastIndex));
+        highlightedResult.innerHTML = highlighted || escapeHtml(text);
+
+        // Stats
+        matchCount.textContent = matches.length;
+        matchLength.textContent = matches.reduce((sum, m) => sum + m[0].length, 0);
+        execTime.textContent = Math.round(endTime - startTime) + 'ms';
+
+        // Match details
+        if (matches.length > 0 && matches.length <= 100) {
+          matchDetails.classList.remove('hidden');
+          matchList.innerHTML = matches.map((m, i) => `
+            <div class="p-3 bg-white rounded-lg border border-gray-200">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm font-medium text-primary">Match ${i + 1}</span>
+                <span class="text-xs text-gray-500">Index: ${m.index}</span>
+              </div>
+              <div class="font-mono text-sm bg-gray-50 p-2 rounded mb-1">${escapeHtml(m[0])}</div>
+              ${m.length > 1 ? `
+                <div class="text-xs text-gray-500">
+                  Groups: ${m.slice(1).map((g, gi) => `$${gi + 1}: "${g || ''}"`).join(', ')}
+                </div>
+              ` : ''}
+            </div>
+          `).join('');
+        } else {
+          matchDetails.classList.add('hidden');
+        }
+      } catch (e) {
+        highlightedResult.innerHTML = `<span class="text-red-500">Invalid regex: ${escapeHtml(e.message)}</span>`;
+        matchCount.textContent = '0';
+        matchLength.textContent = '0';
+        execTime.textContent = '-';
+        matchDetails.classList.add('hidden');
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function loadPattern(pattern) {
+      patternInput.value = pattern;
+      testRegex();
+    }
+  </script>
+</body>
+</html>

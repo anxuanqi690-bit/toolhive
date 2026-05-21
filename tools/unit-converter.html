@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter - Length Weight Temperature Area Volume | ToolHive</title>
+  <meta name="description" content="Free unit converter. Convert between length, weight, temperature, area, volume, and speed units instantly. All common units supported.">
+  <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, area converter, volume converter, speed converter, metric converter">
+  <meta property="og:title" content="Unit Converter - ToolHive">
+  <meta property="og:description" content="Convert between all common units instantly.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-2">
+          <span class="text-2xl">🐝</span>
+          <span class="text-xl font-bold text-gray-900">ToolHive</span>
+        </a>
+        <a href="../index.html" class="text-sm text-gray-500 hover:text-primary">← Back to Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-2xl mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📐 Unit Converter</h1>
+        <p class="text-gray-600">Convert between common units instantly</p>
+      </div>
+
+      <!-- Tool Area -->
+      <div class="bg-gray-50 rounded-xl p-6 sm:p-8">
+        <!-- Category Selection -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Category</label>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <button onclick="setCategory('length')" class="cat-btn selected p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="length">
+              <div class="text-xl mb-1">📏</div>
+              <div class="text-xs">Length</div>
+            </button>
+            <button onclick="setCategory('weight')" class="cat-btn p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="weight">
+              <div class="text-xl mb-1">⚖️</div>
+              <div class="text-xs">Weight</div>
+            </button>
+            <button onclick="setCategory('temperature')" class="cat-btn p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="temperature">
+              <div class="text-xl mb-1">🌡️</div>
+              <div class="text-xs">Temp</div>
+            </button>
+            <button onclick="setCategory('area')" class="cat-btn p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="area">
+              <div class="text-xl mb-1">⬜</div>
+              <div class="text-xs">Area</div>
+            </button>
+            <button onclick="setCategory('volume')" class="cat-btn p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="volume">
+              <div class="text-xl mb-1">🧊</div>
+              <div class="text-xs">Volume</div>
+            </button>
+            <button onclick="setCategory('speed')" class="cat-btn p-3 rounded-lg border border-gray-200 text-center hover:border-primary transition-colors" data-cat="speed">
+              <div class="text-xl mb-1">🚀</div>
+              <div class="text-xs">Speed</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Conversion -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <!-- From -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+            <input type="number" id="fromValue" placeholder="Enter value..." class="tool-input mb-2" style="min-height: auto;" oninput="convert()">
+            <select id="fromUnit" class="w-full p-3 border border-gray-200 rounded-lg" onchange="convert()">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+
+          <!-- Swap Button -->
+          <div class="flex items-center justify-center md:justify-end">
+            <button onclick="swapUnits()" class="p-3 rounded-full bg-white border border-gray-200 hover:border-primary transition-colors">
+              <span class="text-xl">⇄</span>
+            </button>
+          </div>
+
+          <!-- To -->
+          <div class="md:col-start-1">
+            <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+            <div id="toResult" class="p-4 bg-white rounded-lg border border-gray-200 mb-2">
+              <span class="text-2xl font-bold text-primary" id="toValue">-</span>
+            </div>
+            <select id="toUnit" class="w-full p-3 border border-gray-200 rounded-lg" onchange="convert()">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div id="quickRef" class="p-4 bg-white rounded-lg border border-gray-200">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Reference</label>
+          <div id="refList" class="text-sm text-gray-600 space-y-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-semibold text-gray-900 mb-2">💡 Unit Categories</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>• <strong>Length:</strong> m, km, cm, mm, mi, ft, in, yd</li>
+          <li>• <strong>Weight:</strong> kg, g, mg, lb, oz, ton</li>
+          <li>• <strong>Temperature:</strong> °C, °F, K</li>
+          <li>• <strong>Area:</strong> m², km², ft², acre, hectare</li>
+          <li>• <strong>Volume:</strong> L, mL, gal, qt, fl oz, m³</li>
+          <li>• <strong>Speed:</strong> m/s, km/h, mph, knots</li>
+        </ul>
+      </div>
+
+      <!-- Related Tools -->
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Try Other Tools</h2>
+        <div class="related-tools">
+          <a href="color-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">🎨</span>
+            <span>Color Converter</span>
+          </a>
+          <a href="timestamp-converter.html" class="related-tool-card">
+            <span class="text-xl mr-2">⏱️</span>
+            <span>Timestamp Converter</span>
+          </a>
+          <a href="css-gradient-generator.html" class="related-tool-card">
+            <span class="text-xl mr-2">🌈</span>
+            <span>Gradient Generator</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 bg-white py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500">© 2024 ToolHive. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .cat-btn.selected {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.05);
+    }
+  </style>
+
+  <script>
+    const units = {
+      length: {
+        name: 'Length',
+        units: [
+          { id: 'm', name: 'Meter (m)', factor: 1 },
+          { id: 'km', name: 'Kilometer (km)', factor: 1000 },
+          { id: 'cm', name: 'Centimeter (cm)', factor: 0.01 },
+          { id: 'mm', name: 'Millimeter (mm)', factor: 0.001 },
+          { id: 'mi', name: 'Mile (mi)', factor: 1609.344 },
+          { id: 'ft', name: 'Foot (ft)', factor: 0.3048 },
+          { id: 'in', name: 'Inch (in)', factor: 0.0254 },
+          { id: 'yd', name: 'Yard (yd)', factor: 0.9144 }
+        ],
+        ref: '1 m = 3.281 ft = 39.37 in'
+      },
+      weight: {
+        name: 'Weight',
+        units: [
+          { id: 'kg', name: 'Kilogram (kg)', factor: 1 },
+          { id: 'g', name: 'Gram (g)', factor: 0.001 },
+          { id: 'mg', name: 'Milligram (mg)', factor: 0.000001 },
+          { id: 'lb', name: 'Pound (lb)', factor: 0.453592 },
+          { id: 'oz', name: 'Ounce (oz)', factor: 0.0283495 },
+          { id: 'ton', name: 'Metric Ton (t)', factor: 1000 }
+        ],
+        ref: '1 kg = 2.205 lb = 35.27 oz'
+      },
+      temperature: {
+        name: 'Temperature',
+        units: [
+          { id: 'c', name: 'Celsius (°C)', factor: 1 },
+          { id: 'f', name: 'Fahrenheit (°F)', factor: 1 },
+          { id: 'k', name: 'Kelvin (K)', factor: 1 }
+        ],
+        ref: '0°C = 32°F = 273.15K'
+      },
+      area: {
+        name: 'Area',
+        units: [
+          { id: 'm2', name: 'Square Meter (m²)', factor: 1 },
+          { id: 'km2', name: 'Square Kilometer (km²)', factor: 1000000 },
+          { id: 'cm2', name: 'Square Centimeter (cm²)', factor: 0.0001 },
+          { id: 'ft2', name: 'Square Foot (ft²)', factor: 0.092903 },
+          { id: 'acre', name: 'Acre', factor: 4046.86 },
+          { id: 'ha', name: 'Hectare (ha)', factor: 10000 }
+        ],
+        ref: '1 hectare = 10,000 m² = 2.471 acre'
+      },
+      volume: {
+        name: 'Volume',
+        units: [
+          { id: 'l', name: 'Liter (L)', factor: 1 },
+          { id: 'ml', name: 'Milliliter (mL)', factor: 0.001 },
+          { id: 'm3', name: 'Cubic Meter (m³)', factor: 1000 },
+          { id: 'gal', name: 'US Gallon (gal)', factor: 3.78541 },
+          { id: 'qt', name: 'US Quart (qt)', factor: 0.946353 },
+          { id: 'floz', name: 'US Fluid Ounce (fl oz)', factor: 0.0295735 }
+        ],
+        ref: '1 L = 0.264 gal = 33.81 fl oz'
+      },
+      speed: {
+        name: 'Speed',
+        units: [
+          { id: 'ms', name: 'Meter/Second (m/s)', factor: 1 },
+          { id: 'kmh', name: 'Kilometer/Hour (km/h)', factor: 0.277778 },
+          { id: 'mph', name: 'Mile/Hour (mph)', factor: 0.44704 },
+          { id: 'knot', name: 'Knot (kn)', factor: 0.514444 },
+          { id: 'fps', name: 'Foot/Second (ft/s)', factor: 0.3048 }
+        ],
+        ref: '1 m/s = 3.6 km/h = 2.237 mph'
+      }
+    };
+
+    let currentCategory = 'length';
+
+    const fromValue = document.getElementById('fromValue');
+    const fromUnit = document.getElementById('fromUnit');
+    const toValue = document.getElementById('toValue');
+    const toUnit = document.getElementById('toUnit');
+    const refList = document.getElementById('refList');
+
+    function setCategory(category) {
+      currentCategory = category;
+      
+      // Update buttons
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('selected');
+        if (btn.dataset.cat === category) {
+          btn.classList.add('selected');
+        }
+      });
+
+      // Populate dropdowns
+      const categoryData = units[category];
+      const options = categoryData.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+      fromUnit.innerHTML = options;
+      
+      // Set different default for "to"
+      const toOptions = categoryData.units.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+      toUnit.innerHTML = toOptions;
+      
+      // Default selections
+      if (categoryData.units.length >= 2) {
+        toUnit.selectedIndex = 1;
+      }
+
+      // Update reference
+      refList.innerHTML = categoryData.ref;
+
+      convert();
+    }
+
+    function swapUnits() {
+      const temp = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = temp;
+      convert();
+    }
+
+    function convert() {
+      const value = parseFloat(fromValue.value);
+      const from = fromUnit.value;
+      const to = toUnit.value;
+
+      if (isNaN(value)) {
+        toValue.textContent = '-';
+        return;
+      }
+
+      let result;
+      if (currentCategory === 'temperature') {
+        result = convertTemperature(value, from, to);
+      } else {
+        const fromUnitData = units[currentCategory].units.find(u => u.id === from);
+        const toUnitData = units[currentCategory].units.find(u => u.id === to);
+        result = value * fromUnitData.factor / toUnitData.factor;
+      }
+
+      // Format result
+      if (Math.abs(result) < 0.0001 || Math.abs(result) > 999999) {
+        toValue.textContent = result.toExponential(4);
+      } else {
+        toValue.textContent = parseFloat(result.toPrecision(10)).toString();
+      }
+    }
+
+    function convertTemperature(value, from, to) {
+      // Convert to Celsius first
+      let celsius;
+      switch (from) {
+        case 'c': celsius = value; break;
+        case 'f': celsius = (value - 32) * 5 / 9; break;
+        case 'k': celsius = value - 273.15; break;
+      }
+      
+      // Convert from Celsius to target
+      switch (to) {
+        case 'c': return celsius;
+        case 'f': return celsius * 9 / 5 + 32;
+        case 'k': return celsius + 273.15;
+      }
+    }
+
+    // Initialize
+    setCategory('length');
+  </script>
+</body>
+</html>
