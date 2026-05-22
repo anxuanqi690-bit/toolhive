@@ -5,6 +5,12 @@
   "framework": null,
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "analytics": {
+    "enabled": true
+  }
 }
